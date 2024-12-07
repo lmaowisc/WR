@@ -1,4 +1,4 @@
 url: https://lmaowisc.github.io/WR/
 template:
   bootstrap: 5
-  math-rendering: katex
+  math-rendering: mathjax
