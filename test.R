@@ -172,7 +172,7 @@ usethis::use_pkgdown_github_pages()
 
 # Work space  ------------------------------------------------------------
 
-
+ s
 
 ?mtroc
 
