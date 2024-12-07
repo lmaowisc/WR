@@ -10,7 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample win ratio tests of possibly recurrent event and death">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample win ratio tests of possibly recurrent event and death">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -76,88 +76,121 @@ two-sample win ratio tests of recurrent event and death (Mao et al.,
 <div class="section level3">
 <h3 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h3>
-<p>Let <span class="math inline">\(D\)</span> denote the survival time
-and write <span class="math inline">\(N_D(t)=I(D\leq t)\)</span>.
-Likewise, let <span class="math inline">\(T_1&lt;T_2&lt;\cdots\)</span>
-denote the recurrent event times and write <span class="math inline">\(N_H(t)=\sum_{k=1}^\infty I(T_k\leq t)\)</span>. In
-other words, <span class="math inline">\(N_H(t)\)</span> is the counting
-process for the recurrent event. Since death is a terminal event, we
-must have that <span class="math inline">\(N_H(t)=N_H(t\wedge
-D)\)</span>, where <span class="math inline">\(b\wedge
-c=\min(b,c)\)</span>. Let <span class="math inline">\(\boldsymbol
-Y(t)=\{N_D(u), N_H(u):0\leq u\leq t\}\)</span> denote the event history
-up to time <span class="math inline">\(t\)</span>. The full outcome data
-without censoring are thus <span class="math inline">\(\boldsymbol
-Y:=\boldsymbol Y(\tau)\)</span>, where <span class="math inline">\(\tau\)</span> is the maximum length of
-follow-up.</p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+denote the survival time and write
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>D</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mo>≤</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">N_D(t)=I(D\leq t)</annotation></semantics></math>.
+Likewise, let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mn>1</mn></msub><mo>&lt;</mo><msub><mi>T</mi><mn>2</mn></msub><mo>&lt;</mo><mi>⋯</mi></mrow><annotation encoding="application/x-tex">T_1&lt;T_2&lt;\cdots</annotation></semantics></math>
+denote the recurrent event times and write
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>H</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>∞</mi></msubsup><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>T</mi><mi>k</mi></msub><mo>≤</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">N_H(t)=\sum_{k=1}^\infty I(T_k\leq t)</annotation></semantics></math>.
+In other words,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>H</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">N_H(t)</annotation></semantics></math>
+is the counting process for the recurrent event. Since death is a
+terminal event, we must have that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>H</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>N</mi><mi>H</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>∧</mo><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">N_H(t)=N_H(t\wedge D)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>∧</mo><mi>c</mi><mo>=</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>b</mi><mo>,</mo><mi>c</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">b\wedge c=\min(b,c)</annotation></semantics></math>.
+Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>D</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><msub><mi>N</mi><mi>H</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>u</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>:</mo><mn>0</mn><mo>≤</mo><mi>u</mi><mo>≤</mo><mi>t</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\boldsymbol Y(t)=\{N_D(u), N_H(u):0\leq u\leq t\}</annotation></semantics></math>
+denote the event history up to time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.
+The full outcome data without censoring are thus
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>:=</mo><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>τ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol Y:=\boldsymbol Y(\tau)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>τ</mi><annotation encoding="application/x-tex">\tau</annotation></semantics></math>
+is the maximum length of follow-up.</p>
 </div>
 <div class="section level3">
 <h3 id="general-framework-for-hypotheses-and-tests">General framework for hypotheses and tests<a class="anchor" aria-label="anchor" href="#general-framework-for-hypotheses-and-tests"></a>
 </h3>
-<p>Use <span class="math inline">\(a=1\)</span> to denote the active
-treatment and <span class="math inline">\(a=0\)</span> to denote the
-control. For all notation introduced above, use the subscript <span class="math inline">\((a)\)</span> to denote the corresponding
-group-specific quantity. For example, <span class="math inline">\(\boldsymbol Y^{(a)}\)</span> represents the
-outcome data from group <span class="math inline">\(a\)</span> <span class="math inline">\((a=1, 0)\)</span>. Consider a time-dependent win
-function of the form <span class="math display">\[\mathcal W(\boldsymbol
-Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
+<p>Use
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a=1</annotation></semantics></math>
+to denote the active treatment and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">a=0</annotation></semantics></math>
+to denote the control. For all notation introduced above, use the
+subscript
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(a)</annotation></semantics></math>
+to denote the corresponding group-specific quantity. For example,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><annotation encoding="application/x-tex">\boldsymbol Y^{(a)}</annotation></semantics></math>
+represents the outcome data from group
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>=</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(a=1, 0)</annotation></semantics></math>.
+Consider a time-dependent win function of the form
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mtext mathvariant="normal">patient in group </mtext><mspace width="0.333em"></mspace></mrow><mi>a</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> wins against that in group </mtext><mspace width="0.333em"></mspace></mrow><mrow><mn>1</mn><mo>−</mo><mi>a</mi></mrow><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> by
+time </mtext><mspace width="0.333em"></mspace></mrow><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal W(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t) 
 = I(\mbox{patient in group $a$ wins against that in group $1-a$ by
-time $t$}).\]</span> The specific definition of <span class="math inline">\(\mathcal W\)</span> will be discussed later.</p>
+time $t$}).</annotation></semantics></math> The specific definition of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝒲</mi><annotation encoding="application/x-tex">\mathcal W</annotation></semantics></math>
+will be discussed later.</p>
 <p>Given such a rule of cross-group comparison, the win and loss
-probabilities for the treatment against control by time <span class="math inline">\(t\)</span> are <span class="math inline">\(w(t)=E\{\mathcal W(\boldsymbol Y^{(1)},
-\boldsymbol Y^{(0)})(t)\}\)</span> and <span class="math inline">\(l(t)=E\{\mathcal W(\boldsymbol Y^{(0)},
-\boldsymbol Y^{(0)})(t)\}\)</span>, respectively. Suppose that we wish
-to test the null hypothesis that the win and loss probabilities are
-equal, i.e., <span class="math display">\[H_0:
-w(t)=l(t)\hspace{2ex}\mbox{for all }t\in[0, \tau],\]</span> against the
-alternative hypothesis that the win probability dominates the loss
-probability, i.e., <span class="math display">\[\begin{equation}\tag{1}
+probabilities for the treatment against control by time
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">{</mo><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">w(t)=E\{\mathcal W(\boldsymbol Y^{(1)}, \boldsymbol Y^{(0)})(t)\}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>E</mi><mo stretchy="false" form="prefix">{</mo><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">l(t)=E\{\mathcal W(\boldsymbol Y^{(0)}, \boldsymbol Y^{(0)})(t)\}</annotation></semantics></math>,
+respectively. Suppose that we wish to test the null hypothesis that the
+win and loss probabilities are equal, i.e., <span class="math display">$$H_0: w(t)=l(t)\hspace{2ex}\mbox{for all }t\in[0,
+\tau],$$</span> against the alternative hypothesis that the win
+probability dominates the loss probability, i.e., <span class="math display">$$\begin{equation}\tag{1}
 H_A: w(t)\geq l(t)\hspace{1ex}\mbox{for all }t\in[0, \tau]
 \mbox{ with strict inequality for some }t.
-\end{equation}\]</span> With censored data, a general way to test such
+\end{equation}$$</span> With censored data, a general way to test such
 hypotheses is to use a log-transformed two-sample win ratio constructed
 similarly to Pocock et al. (2012), only with the pairwise rule of
-comparison replaced by the customized <span class="math inline">\(\mathcal W(\cdot,\cdot)(t)\)</span>, where <span class="math inline">\(t\)</span> is set as the earlier of the two
-observed follow-up times. A stratified test can also be developed along
-the lines of Dong et al. (2018).</p>
+comparison replaced by the customized
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo>,</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal W(\cdot,\cdot)(t)</annotation></semantics></math>,
+where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+is set as the earlier of the two observed follow-up times. A stratified
+test can also be developed along the lines of Dong et al. (2018).</p>
 </div>
 <div class="section level3">
 <h3 id="choice-of-win-function">Choice of win function<a class="anchor" aria-label="anchor" href="#choice-of-win-function"></a>
 </h3>
-<p>Different choices of <span class="math inline">\(\mathcal W\)</span>
+<p>Different choices of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝒲</mi><annotation encoding="application/x-tex">\mathcal W</annotation></semantics></math>
 will lead to different hypotheses and tests. The standard win ratio
-(SWR) of Pocock et al. (2012) corresponds to the choice of <span class="math display">\[\mathcal W_S(\boldsymbol Y^{(a)}, \boldsymbol
-Y^{(1-a)})(t)
-=I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I(D^{(a)}\wedge D^{(1-a)}&gt;t,
-T_1^{(1-a)}&lt;T_1^{(a)}\wedge t).\]</span> With recurrent nonfatal
-event, <span class="math inline">\(\mathcal W_S\)</span> fails to fully
-exploit the data as it draws only on the first occurrence. A more
-efficient rule is given by the last-event-assisted win ratio (LWR),
-which compares on the nonfatal event first by its cumulative frequency,
-with ties broken by the time of its last episode. In other words, <span class="math display">\[\begin{align}
+(SWR) of Pocock et al. (2012) corresponds to the choice of
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝒲</mi><mi>S</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>,</mo><msup><mi>𝐘</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>&lt;</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>∧</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>∧</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>&gt;</mo><mi>t</mi><mo>,</mo><msubsup><mi>T</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&lt;</mo><msubsup><mi>T</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>∧</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal W_S(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
+=I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I(D^{(a)}\wedge D^{(1-a)}&gt;t, T_1^{(1-a)}&lt;T_1^{(a)}\wedge t).</annotation></semantics></math>
+With recurrent nonfatal event,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝒲</mi><mi>S</mi></msub><annotation encoding="application/x-tex">\mathcal W_S</annotation></semantics></math>
+fails to fully exploit the data as it draws only on the first
+occurrence. A more efficient rule is given by the last-event-assisted
+win ratio (LWR), which compares on the nonfatal event first by its
+cumulative frequency, with ties broken by the time of its last episode.
+In other words, <span class="math display">$$\begin{align}
 \mathcal W_L(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
 &amp;=I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I\{D^{(a)}\wedge D^{(1-a)}&gt;t,
 N_H^{(a)}(t)&lt;N_H^{(1-a)}(t)\}\\
 &amp;\hspace{1ex}+I\{D^{(a)}\wedge D^{(1-a)}&gt;t,
 N_H^{(a)}(t)=N_H^{(1-a)}(t)=\mbox{ some } k,
 T_k^{(1-a)}&lt;T_k^{(a)}\}.
-\end{align}\]</span> Likewise we can construct a first-event-assisted
-win ratio (FWR) by replacing the <span class="math inline">\(T_k^{(a)}\)</span> with the <span class="math inline">\(T_1^{(a)}\)</span>, or a naive win ratio (NWR) by
-removing the tie-breaking third term altogether (see Mao et al. (2022)
-for details). Nonetheless, it is recommended that the LWR be used as the
-default, as it makes fuller use of the data and reduces to the SWR when
-the nonfatal event occurs at most once.</p>
+\end{align}$$</span> Likewise we can construct a first-event-assisted
+win ratio (FWR) by replacing the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>T</mi><mi>k</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><annotation encoding="application/x-tex">T_k^{(a)}</annotation></semantics></math>
+with the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>T</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><annotation encoding="application/x-tex">T_1^{(a)}</annotation></semantics></math>,
+or a naive win ratio (NWR) by removing the tie-breaking third term
+altogether (see Mao et al. (2022) for details). Nonetheless, it is
+recommended that the LWR be used as the default, as it makes fuller use
+of the data and reduces to the SWR when the nonfatal event occurs at
+most once.</p>
 <p>Under the LWR, a simple condition that implies the dominance of win
 probability in (1) is a joint stochastic order of the event times
-between the two groups: <span class="math display">\[\begin{equation}\tag{2}
+between the two groups:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>&gt;</mo><mi>s</mi><mo>,</mo><msubsup><mi>T</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>T</mi><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msub><mi>t</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>&gt;</mo><mi>P</mi><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi>D</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msup><mo>&gt;</mo><mi>s</mi><mo>,</mo><msubsup><mi>T</mi><mn>1</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>T</mi><mn>2</mn><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo stretchy="true" form="postfix">)</mo></mrow></msubsup><mo>&gt;</mo><msub><mi>t</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}\tag{2}
 {P}(D^{(1)}&gt;s, T^{(1)}_{1}&gt;t_1, T^{(1)}_{2}&gt;t_2, \ldots)&gt;
 {P}(D^{(0)}&gt;s, T^{(0)}_{1}&gt;t_1, T^{(0)}_{2}&gt;t_2, \ldots),
-\end{equation}\]</span> for all <span class="math inline">\(0\leq
-t_1\leq t_2\leq\cdots\leq s\leq\tau\)</span>. Expression (2) means that
-the treatment stochastically delays all events, fatal and nonfatal,
-jointly as compared to the control. Hence, when (2) is true, the LWR
-test rejects <span class="math inline">\(H_0\)</span> with probability
-tending to 1 as the sample size increases to infinity.</p>
+\end{equation}</annotation></semantics></math> for all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>t</mi><mn>1</mn></msub><mo>≤</mo><msub><mi>t</mi><mn>2</mn></msub><mo>≤</mo><mi>⋯</mi><mo>≤</mo><mi>s</mi><mo>≤</mo><mi>τ</mi></mrow><annotation encoding="application/x-tex">0\leq t_1\leq t_2\leq\cdots\leq s\leq\tau</annotation></semantics></math>.
+Expression (2) means that the treatment stochastically delays all
+events, fatal and nonfatal, jointly as compared to the control. Hence,
+when (2) is true, the LWR test rejects
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>
+with probability tending to 1 as the sample size increases to
+infinity.</p>
 </div>
 </div>
 <div class="section level2">
@@ -179,8 +212,9 @@ test, use</p>
 variable through an additional <code>strata=</code> argument. To get
 test results from FWR and NWR as well, add the option
 <code>naive=TRUE</code>. Printing the object <code>obj</code> gives us
-the <span class="math inline">\(p\)</span>-values of the tests as well
-as some descriptive statistics.</p>
+the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
+of the tests as well as some descriptive statistics.</p>
 </div>
 <div class="section level2">
 <h2 id="an-example-with-the-hf-action-trial">AN EXAMPLE WITH THE HF-ACTION TRIAL<a class="anchor" aria-label="anchor" href="#an-example-with-the-hf-action-trial"></a>
@@ -197,9 +231,11 @@ The study aimed to assess the effect of adding aerobic exercise training
 to usual care on the patient’s composite endpoint of all-cause death and
 all-cause hospitalization. The primary analysis of the whole study
 population showed a moderate and non-significant reduction in the risk
-of time to the first composite event (hazard ratio 0.93; <span class="math inline">\(p\)</span>-value 0.13). Here we focus on a
-subgroup of non-ischemic patients with reduced cardio-pulmonary exercise
-(CPX) test duration (i.e., <span class="math inline">\(\leq 9\)</span>
+of time to the first composite event (hazard ratio 0.93;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
+0.13). Here we focus on a subgroup of non-ischemic patients with reduced
+cardio-pulmonary exercise (CPX) test duration (i.e.,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≤</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">\leq 9</annotation></semantics></math>
 minutes before reporting of discomfort). There are scientific and
 empirical evidence suggesting that this particular sub-population may
 benefit more from exercise training interventions than does the average
@@ -254,9 +290,11 @@ care stratified by age, use the code</p>
 <span><span class="co">#&gt; *Note: The scale of WR should be interpreted with caution as it depends on </span></span>
 <span><span class="co">#&gt; censoring distribution without modeling assumptions.</span></span></code></pre></div>
 <p>We can see from the output above that 57 (25.8%) out of 221 patients
-died in usual care, with an average of <span class="math inline">\(571/221=2.6\)</span> hospitalizations per patient;
-and that 36 (17.6%) out of 205 patients died in exercise training with
-an average of <span class="math inline">\(451/205=2.2\)</span>
+died in usual care, with an average of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>571</mn><mi>/</mi><mn>221</mn><mo>=</mo><mn>2.6</mn></mrow><annotation encoding="application/x-tex">571/221=2.6</annotation></semantics></math>
+hospitalizations per patient; and that 36 (17.6%) out of 205 patients
+died in exercise training with an average of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>451</mn><mi>/</mi><mn>205</mn><mo>=</mo><mn>2.2</mn></mrow><annotation encoding="application/x-tex">451/205=2.2</annotation></semantics></math>
 hospitalizations per patient. Clearly, those undergoing exercise
 training are doing much better in terms of both overall survival and
 recurrent hospitalization.</p>
@@ -264,9 +302,11 @@ recurrent hospitalization.</p>
 LWR, FWR, and NWR. Although estimates of overall win and loss
 probabilities, as well as the win ratio, are provided, their magnitudes
 are generally dependent on the censoring distribution and should thus be
-interpreted with caution. On the other hand, the <span class="math inline">\(p\)</span>-values are from valid tests of the null
-and alternative hypotheses discussed in the earlier section. We can see
-that all three tests yield <span class="math inline">\(p\)</span>-values
+interpreted with caution. On the other hand, the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
+are from valid tests of the null and alternative hypotheses discussed in
+the earlier section. We can see that all three tests yield
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-values
 less than the conventional threshold 0.05, suggesting that exercise
 training significantly reduces mortality and recurrent
 hospitalization.</p>
