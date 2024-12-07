@@ -15,12 +15,12 @@ library(usethis)
 # library(fs)
 
 
-# use_git_config(
-#   user.name = "lmaowisc",
-#   user.email = "lmao@biostat.wisc.edu"
-# )
+use_git_config(
+  user.name = "lmaowisc",
+  user.email = "lmao@biostat.wisc.edu"
+)
 
-# use_git()
+use_git()
 
 # usethis:::use_devtools()
 

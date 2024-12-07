@@ -4,7 +4,7 @@ Title: Win Ratio Analysis of Composite Time-to-Event Outcomes
 Version: 1.0
 Author: Lu Mao and Tuo Wang
 Maintainer: Lu Mao <lmao@biostat.wisc.edu>
-URL: https://sites.google.com/view/lmaowisc/
+URL: https://sites.google.com/view/lmaowisc/, https://lmaowisc.github.io/WR/
 Description: Implements various win ratio methodologies for composite endpoints of death and 
   non-fatal events, including the (stratified) proportional win-fractions (PW) regression models 
   (Mao and Wang, 2020 <doi:10.1111/biom.13382>), (stratified) two-sample tests with possibly 
