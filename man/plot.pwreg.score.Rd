@@ -39,7 +39,7 @@
 
 \item{lwd}{the line width, a positive number. Default is 1.}
 
-\item{...}{further arguments passed to or from other methods}
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 A plot of the standardized score process for object \code{pwreg.score}.

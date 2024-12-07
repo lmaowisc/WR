@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \code{pwreg}.}
 
-\item{...}{further arguments passed to or from other methods}
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 Print the results of \code{pwreg} object

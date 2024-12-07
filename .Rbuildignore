@@ -5,3 +5,5 @@
 ^pkgdown$
 ^\.github$
 ^test.R$
+^LICENSE\.md$
+^README.Rmd
