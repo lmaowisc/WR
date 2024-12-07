@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Stratified proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event • WR</title>
-<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
-<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Stratified proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Stratified proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -80,65 +79,95 @@ model of Mao and Wang (2020, <em>Biometrics</em>).</p>
 <div class="section level3">
 <h3 id="outcome-data-and-modeling-target">Outcome data and modeling target<a class="anchor" aria-label="anchor" href="#outcome-data-and-modeling-target"></a>
 </h3>
-<p>Let <span class="math inline">D</span> denote the survival time,
-<span class="math inline">T</span> time to the first nonfatal event like
-hospitalization, and <span class="math inline">\boldsymbol Z</span> a
-<span class="math inline">p</span>-vector of covariates. The composite
-outcome is <span class="math inline">\boldsymbol Y=(D, T)</span>, with
-<span class="math inline">D</span> prioritized over <span class="math inline">T</span>. Suppose that there are <span class="math inline">L</span> strata defined by, e.g., patient
-demographics or study center. In the <span class="math inline">l</span>th stratum <span class="math inline">(l=1,\ldots, L)</span>, if we want to compare the
-<span class="math inline">i</span>th and <span class="math inline">j</span>th patients, denoted respectively using
-subscripts <span class="math inline">li</span> and <span class="math inline">lj</span>, we can use Pocock et al.’s (2012)
-sequential rule with the “win indicator” defined by <span class="math display">\begin{align*}
-\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t)
-&amp; = I(\mbox{subject $i$ wins against subject $j$ by $t$ in stratum
-$l$})\\
-&amp; = I(D_{lj} &lt; D_{li} \wedge t) + I(D_{li} \wedge D_{lj} &gt; t,
-T_{lj} &lt; T_{li} \wedge t),
-\end{align*}</span> where <span class="math inline">a\wedge
-b=\min(a,b)</span>. Then, the (time-dependent) covariate-specific win
-ratio in the <span class="math inline">l</span>th stratum is <span class="math display">\mathcal R_l(t;\boldsymbol Z_{li}, \boldsymbol
-Z_{lj}):=
-\frac{E\{\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t)\mid
-\boldsymbol Z_{li}, \boldsymbol Z_{lj}\}}{E\{\mathcal W(\boldsymbol
-Y_{lj}, \boldsymbol Y_{li})(t)\mid \boldsymbol Z_{li}, \boldsymbol
-Z_{lj}\}}.</span></p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+denote the survival time,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+time to the first nonfatal event like hospitalization, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐙</mi><annotation encoding="application/x-tex">\boldsymbol Z</annotation></semantics></math>
+a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-vector
+of covariates. The composite outcome is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐘</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>D</mi><mo>,</mo><mi>T</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol Y=(D, T)</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+prioritized over
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>.
+Suppose that there are
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+strata defined by, e.g., patient demographics or study center. In the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>th
+stratum
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><mi>l</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>L</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(l=1,\ldots, L)</annotation></semantics></math>,
+if we want to compare the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>th
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>th
+patients, denoted respectively using subscripts
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">li</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>j</mi></mrow><annotation encoding="application/x-tex">lj</annotation></semantics></math>,
+we can use Pocock et al.’s (2012) sequential rule with the “win
+indicator” defined by
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mtext mathvariant="normal">subject </mtext><mspace width="0.333em"></mspace></mrow><mi>i</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> wins against subject </mtext><mspace width="0.333em"></mspace></mrow><mi>j</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> by </mtext><mspace width="0.333em"></mspace></mrow><mi>t</mi><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> in stratum </mtext><mspace width="0.333em"></mspace></mrow><mi>l</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>D</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo>&lt;</mo><msub><mi>D</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>∧</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mi>I</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>D</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>∧</mo><msub><mi>D</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo>&gt;</mo><mi>t</mi><mo>,</mo><msub><mi>T</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo>&lt;</mo><msub><mi>T</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>∧</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
+\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t) 
+&amp; = I(\mbox{subject $i$ wins against subject $j$ by $t$ in stratum $l$})\\ 
+&amp; = I(D_{lj} &lt; D_{li} \wedge t) + I(D_{li} \wedge D_{lj} &gt; t, T_{lj} &lt; T_{li} \wedge t),
+\end{align*}</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>∧</mo><mi>b</mi><mo>=</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">a\wedge b=\min(a,b)</annotation></semantics></math>.
+Then, the (time-dependent) covariate-specific win ratio in the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>l</mi><annotation encoding="application/x-tex">l</annotation></semantics></math>th
+stratum is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℛ</mi><mi>l</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo>;</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>:=</mo><mfrac><mrow><mi>E</mi><mo stretchy="false" form="prefix">{</mo><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∣</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="postfix">}</mo></mrow><mrow><mi>E</mi><mo stretchy="false" form="prefix">{</mo><mi>𝒲</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo>,</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>t</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>∣</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>,</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>j</mi></mrow></msub><mo stretchy="false" form="postfix">}</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal R_l(t;\boldsymbol Z_{li}, \boldsymbol Z_{lj}):=
+\frac{E\{\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t)\mid \boldsymbol Z_{li}, \boldsymbol Z_{lj}\}}{E\{\mathcal W(\boldsymbol Y_{lj}, \boldsymbol Y_{li})(t)\mid \boldsymbol Z_{li}, \boldsymbol Z_{lj}\}}.</annotation></semantics></math></p>
 </div>
 <div class="section level3">
 <h3 id="model-specification">Model specification<a class="anchor" aria-label="anchor" href="#model-specification"></a>
 </h3>
-<p>The stratified PW model specifies that <span class="math display">\begin{equation}\tag{1}
+<p>The stratified PW model specifies that <span class="math display">$$\begin{equation}\tag{1}
 \mbox{Stratified PW:}\hspace{3mm} \mathcal R_l(t;\boldsymbol Z_{li},
 \boldsymbol Z_{lj})=\exp\{\boldsymbol\beta^{\rm T}(\boldsymbol Z_{li}
 -\boldsymbol Z_{lj})\},\hspace{3mm} l=1,\ldots, L.
-\end{equation}</span> That is, we assume that the covariate-specific win
-ratio in each stratum is invariant to the follow-up time
+\end{equation}$$</span> That is, we assume that the covariate-specific
+win ratio in each stratum is invariant to the follow-up time
 (proportionality of the win fractions) and depends on a common
-regression parameter <span class="math inline">\boldsymbol\beta</span>.
-Under model (1), the components of <span class="math inline">\boldsymbol\beta</span> can be interpreted as the
-log-win ratios associated with unit increases in the corresponding
-covariates <em>within each stratum</em>. Because model (1) involves only
-within-stratum comparisons, it does not require proportionality to hold
-across strata as an unstratified PW model does.</p>
+regression parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛃</mi><annotation encoding="application/x-tex">\boldsymbol\beta</annotation></semantics></math>.
+Under model (1), the components of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛃</mi><annotation encoding="application/x-tex">\boldsymbol\beta</annotation></semantics></math>
+can be interpreted as the log-win ratios associated with unit increases
+in the corresponding covariates <em>within each stratum</em>. Because
+model (1) involves only within-stratum comparisons, it does not require
+proportionality to hold across strata as an unstratified PW model
+does.</p>
 </div>
 <div class="section level3">
 <h3 id="number-of-strata-and-inference-procedure">Number of strata and inference procedure<a class="anchor" aria-label="anchor" href="#number-of-strata-and-inference-procedure"></a>
 </h3>
-<p>Under (1), we can obtain consistent estimates for the parameter <span class="math inline">\boldsymbol\beta</span> based on censored data under
-the independent censoring assumption <span class="math display">(C_{li}\perp \boldsymbol Y_{li})\mid \boldsymbol
-Z_{li}.</span> for every <span class="math inline">l=1,\ldots, L</span>.
+<p>Under (1), we can obtain consistent estimates for the parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛃</mi><annotation encoding="application/x-tex">\boldsymbol\beta</annotation></semantics></math>
+based on censored data under the independent censoring assumption
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>C</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo>⊥</mo><msub><mi>𝐘</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>∣</mo><msub><mi>𝐙</mi><mrow><mi>l</mi><mi>i</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">(C_{li}\perp \boldsymbol Y_{li})\mid \boldsymbol Z_{li}.</annotation></semantics></math>
+for every
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">l=1,\ldots, L</annotation></semantics></math>.
 There are two approaches to estimating the variance of the resulting
-estimator <span class="math inline">\boldsymbol\beta</span>, each
-appropriate in a different context. When the number of strata <span class="math inline">L</span> is small, such as in the case of sex or
-race categories, we can apply the variance estimator of the unstratified
-PW model to each stratum and sum up the stratum-specific variances. We
-call this the <strong>type I</strong> variance estimator. When <span class="math inline">L</span> is large, such as in the case of matched
-pairs (so that <span class="math inline">L=n/2</span>), each stratum
-need not contain enough subjects to support its own variance estimator.
-We instead treat the strata as basic units of observation and take a
-Lindeberg–Feller-type approach to quantifying the variance of the sum of
-the independent (but not necessarily identically distributed) units.
-This gives us a <strong>type II</strong> variance estimator.</p>
+estimator
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛃</mi><annotation encoding="application/x-tex">\boldsymbol\beta</annotation></semantics></math>,
+each appropriate in a different context. When the number of strata
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+is small, such as in the case of sex or race categories, we can apply
+the variance estimator of the unstratified PW model to each stratum and
+sum up the stratum-specific variances. We call this the <strong>type
+I</strong> variance estimator. When
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+is large, such as in the case of matched pairs (so that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>n</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">L=n/2</annotation></semantics></math>),
+each stratum need not contain enough subjects to support its own
+variance estimator. We instead treat the strata as basic units of
+observation and take a Lindeberg–Feller-type approach to quantifying the
+variance of the sum of the independent (but not necessarily identically
+distributed) units. This gives us a <strong>type II</strong> variance
+estimator.</p>
 </div>
 </div>
 <div class="section level2">
@@ -163,22 +192,26 @@ All covariates need to be time-constant.</p>
 <code>Z</code> as specified above. The optional argument
 <code>strata</code> accepts the (categorical) stratifying variable. The
 default option <code>fixedL=TRUE</code> requests the type I variance
-estimator (under small <span class="math inline">L</span>) while
-<code>fixedL=FALSE</code> requests the type II variance estimator (under
-large <span class="math inline">L</span>). The function returns an
-object of class <code>pwreg</code> with a <code>beta</code> vector for
-<span class="math inline">\widehat{\boldsymbol\beta}</span> and a
-<code>Var</code> matrix for <span class="math inline">\text{var}(\widehat{\boldsymbol\beta})</span>. Score
-processes to check the proportionality assumption can be computed and
-plotted by</p>
+estimator (under small
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>)
+while <code>fixedL=FALSE</code> requests the type II variance estimator
+(under large
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>).
+The function returns an object of class <code>pwreg</code> with a
+<code>beta</code> vector for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\widehat{\boldsymbol\beta}</annotation></semantics></math>
+and a <code>Var</code> matrix for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">var</mtext><mrow><mo stretchy="true" form="prefix">(</mo><mover><mi>𝛃</mi><mo accent="true">̂</mo></mover><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\text{var}(\widehat{\boldsymbol\beta})</annotation></semantics></math>.
+Score processes to check the proportionality assumption can be computed
+and plotted by</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## compute the standardized score processes</span></span>
 <span><span class="va">score</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/score.proc.html">score.proc</a></span><span class="op">(</span><span class="va">obj</span><span class="op">)</span></span>
 <span><span class="co">## plot the computed process for the kth covariate</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">score</span>, <span class="va">k</span><span class="op">)</span></span></code></pre></div>
 <p>As a rule of thumb, we consider the proportionality to be tenable if
-the score processes are bounded in <span class="math inline">[-2,
-2]</span>.</p>
+the score processes are bounded in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">[</mo><mo>−</mo><mn>2</mn><mo>,</mo><mn>2</mn><mo stretchy="true" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[-2, 2]</annotation></semantics></math>.</p>
 </div>
 <div class="section level2">
 <h2 id="an-example-with-the-german-breast-cancer-study">AN EXAMPLE WITH THE GERMAN BREAST CANCER STUDY<a class="anchor" aria-label="anchor" href="#an-example-with-the-german-breast-cancer-study"></a>
@@ -296,8 +329,9 @@ estimator.</p>
 <p>We can see that, adjusting for other variables and stratifying by
 menopause status, hormonal treatment makes the patient 1.5 times as
 likely to have a more favorable outcome (prioritizing survival over
-cancer relapse), with 95% confidence interval (1.2, 2.0) and <span class="math inline">p</span>-value 0.003. Next, plot the standardized
-score process for each covariate:</p>
+cancer relapse), with 95% confidence interval (1.2, 2.0) and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>-value
+0.003. Next, plot the standardized score process for each covariate:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">score1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/score.proc.html">score.proc</a></span><span class="op">(</span><span class="va">obj1</span><span class="op">)</span></span>
 <span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"mfrow"</span><span class="op">)</span><span class="op">)</span></span>
@@ -327,8 +361,9 @@ groups.</p>
 <span><span class="co">#&gt; [16] 55.0 56.0 57.0 58.0 59.0 60.0 61.0 62.0 63.0 64.0 65.0 66.0 67.0 69.0 71.0</span></span>
 <span><span class="co">#&gt; [31] 80.0  Inf</span></span>
 <span><span class="va">age_group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">gbc</span><span class="op">$</span><span class="va">age</span>, breaks <span class="op">=</span> <span class="va">cutpoints</span>, right <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>Now that <span class="math inline">L&gt;30</span>, it would be better
-to use type II variance estimator for inference.</p>
+<p>Now that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>&gt;</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">L&gt;30</annotation></semantics></math>,
+it would be better to use type II variance estimator for inference.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## extract the covariate matrix Z from the data</span></span>
 <span><span class="co">## leaving out age as the stratifying variable</span></span>
