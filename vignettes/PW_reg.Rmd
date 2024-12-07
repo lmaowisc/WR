@@ -1,0 +1,199 @@
+---
+title: "Proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event"
+# subtitle: "Application to HF-ACTION study"
+author: "Lu Mao (lmao@biostat.wisc.edu) & Tuo Wang"
+#date: "11/09/2021"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This vignette demonstrates the use of the `WR` package
+in fitting the proportional win-fractions (PW) regression model
+for prioritized composite endpoints consisting of death and a nonfatal event 
+(Mao and Wang, 2020, *Biometrics*).
+The PW model can be viewed as the regression version of the two-sample win ratio
+proposed by Pocock et al. (2012).
+
+
+
+## MODEL SPECIFICATION
+Let $D$ denote the survival time, $T$ time to the first nonfatal event like hospitalization,
+and $\boldsymbol Z$ a $p$-vector of covariates.
+The composite outcome is $\boldsymbol Y=(D, T)$ with $D$ prioritized over $T$.
+If the $i$th and $j$th patients are both followed up to time $t$,
+define
+$$\mathcal W(\boldsymbol Y_i, \boldsymbol Y_j)(t) = I(\mbox{subject $i$ wins against subject $j$ by $t$}) = I(D_j < D_i \wedge t) + I(D_i \wedge D_j > t, T_j < T_i \wedge t),$$
+where $a\wedge b=\min(a,b)$. This ''win indicator''
+uses the sequential comparison rule of Pocock et al. (2012).
+
+
+Then, the covariate-specific win ratio at $t$ is
+\[WR(t;\boldsymbol Z_i, \boldsymbol Z_j):=\frac{E\{\mathcal W(\boldsymbol Y_i, \boldsymbol Y_j)(t)\mid \boldsymbol Z_i, \boldsymbol Z_j\}}{E\{\mathcal W(\boldsymbol Y_j, \boldsymbol Y_i)(t)\mid \boldsymbol Z_i, \boldsymbol Z_j\}}.\]
+For example, if subject $i$ is from the treatment arm with $\boldsymbol Z_i=1$
+and subject $j$ is from the treatment arm with $\boldsymbol Z_j=0$,
+then $WR(t;\boldsymbol Z_i, \boldsymbol Z_j)$ is precisely
+the estimand of Pocock's win ratio comparing the treatment to the control when 
+all subjects in both arms are followed to time $t$.
+
+
+The PW model specifies that
+\[\mbox{PW Model: }\hspace{3mm} WR(t;\boldsymbol Z_i, \boldsymbol Z_j)=\exp\{\boldsymbol\beta^{\rm T}(\boldsymbol Z_i -\boldsymbol Z_j)\}.\]
+Clearly, the PW model assumes that win ratio is invariant to the follow-up time (proportionality assumption).
+Under the model, the components of $\boldsymbol\beta$ can be interpreted as the log win ratios
+associated with unit increases in the corresponding covariates.
+Under the PW model, we can obtain consistent estimates for the parameter $\boldsymbol\beta$ 
+based on censored data regardless of distribution of the censoring time $C$ as long as
+\[(C\perp \boldsymbol Y)\mid \boldsymbol Z.\]
+
+
+## BASIC SYNTAX
+The input data must be in the "long format", with an `ID` vector
+containing unique patient-level identifiers. In addition, we need a `time` vector containing the
+event times and a `status` vector indicating the corresponding cause of the event. The vector `status` 
+should be coded as `1`=death; `2`=non-fatal event; `0`=censoring.
+In the case of recurrent non-fatal event, multiple rows with `status`=2 are allowed.
+However, by nature of the method, only time to the first episode will be used.
+Finally, we need a covariate matrix `Z` with the same row as `ID`.
+Each column of `Z` represents a covariate. All covariates need to be time-constant.
+
+The main function to fit the PW model is `pwreg(time,status, Z, ID)`.
+The function returns an object of class `pwreg`
+with a `beta` vector for $\widehat{\boldsymbol\beta}$ 
+and a `Var` matrix for $\text{var}(\widehat{\boldsymbol\beta})$.
+For details, refer to documentation of the `WR` package.
+
+## AN EXAMPLE WITH THE HF-ACTION TRIAL
+
+We consider a dataset from the HF-ACTION study consisting of 451 non-ischemic heart failure patients.
+The study was conducted between
+April 2003 through Feb 2007 at 82 sites in the USA, Canada, and France (O’Connor et al., 2009). 
+The study objective was to assess the effect of adding aerobic exercise training to
+usual care on the patient’s CV outcomes. The primary endpoint was a composite of all-cause
+death and all-cause hospitalization. 
+
+We first load the `WR` package and the analysis dataset `non_ischemic`.
+```{r setup}
+library(WR)
+head(non_ischemic)
+```
+We re-label the covariates with informative names.
+```{r}
+colnames(non_ischemic)[4:16]=c(
+  "Training vs Usual","Age (year)","Male vs Female","Black vs White", 
+  "Other vs White", "BMI","LVEF","Hypertension","COPD","Diabetes",
+  "ACE Inhibitor","Beta Blocker", "Smoker"
+)
+```
+
+Compute the sample size the median length of follow-up.
+```{r}
+# sample size
+length(unique(non_ischemic$ID))
+# median length of follow-up time
+median(non_ischemic$time[non_ischemic$status<2])/30.5
+```
+So we indeed have $n=451$ unique patients with a median follow-up of 31.6 months.
+
+
+Next, we use the `pwreg()` function to fit the PW model:
+```{r}
+# get the number of rows and number of covariates.
+nr <- nrow(non_ischemic)
+p <- ncol(non_ischemic)-3
+
+# extract ID, time, status and covariates matrix Z from the data.
+# note that: ID, time and status should be column vector.
+# covariatesZ should be (nr, p) matrix.
+ID <- non_ischemic[,"ID"]
+time <- non_ischemic[,"time"]
+status <- non_ischemic[,"status"]
+Z <- as.matrix(non_ischemic[,4:(3+p)],nr,p)
+
+
+# pass the parameters into the function
+pwreg.obj <- pwreg(time=time,status=status,Z=Z,ID=ID)
+print(pwreg.obj)
+```
+The output consists of three parts. The first part presents some descriptive statistics
+on the proportions of win-loss status among all ${n\choose 2}=101,475$ pairs.
+According to the output, $7.5\%$ of them are determined by death; $77.2\%$
+by hospitalization, and the remaining $7.2\%$ are indeterminate.
+It also reports an overall (Wald) test with $p$-value 0.024, suggesting that, at the conventional 0.05 level,
+the 13 covariates are significantly associated with the composite outcome.
+
+
+The second part presents a table for the estimates and standard errors of the 
+regression coefficient, along with their corresponding $p$-value
+for testing the coefficient being zero.
+The third part is perhaps the most informative, tabulating the estimated win ratios
+(exponential of the regression coefficients) and their
+associated $95\%$ confidence intervals. 
+We can see that a patient in exercise training is $21\%$ more likely to have a better
+priority-adjusted composite outcome than one in usual care.
+However, this difference is statistically not significant.
+In addition, younger age, white race, higher LVEF are significantly associated with
+more favorable outcomes than otherwise, while the beneficial effects of low BMI
+and absence of COPD history are border-line significant.
+
+
+To assess the effect of race on the composite outcome, we test the null hypothesis
+\[H_0:\beta_4=\beta_5=0.\]
+We  conduct a 2-df Chi-square Wald test based on $(\widehat\beta_4,\widehat\beta_5)^{T}$:
+```{r}
+#extract estimates of (\beta_4,\beta_5)
+beta <- matrix(pwreg.obj$beta[4:5])
+#extract estimated covariance matrix for (\beta_4,\beta_5)
+Sigma <- pwreg.obj$Var[4:5,4:5]
+#compute chisq statistic in quadratic form
+chistats <- t(beta) %*% solve(Sigma) %*% beta  
+
+#compare the Wald statistic with the reference
+# distribution of chisq(2) to obtain the p-value
+1 - pchisq(chistats, df=2)
+```
+The $p$-value is 0.102. So the overall effect of race on the composite outcome
+is non-significant.
+
+
+Finally, we use the `score.proc()` function to plot the standardized score process for each covariate:
+
+```{r, fig.height = 8, fig.width=7.5}
+score.obj <- score.proc(pwreg.obj)
+print(score.obj)
+
+oldpar <- par(mfrow = par("mfrow"))
+par(mfrow = c(4,4))
+for(i in c(1:13)){
+  plot(score.obj, k = i)
+}
+par(oldpar)
+```
+
+Most curves are fairly patternless with suprema well bounded by 2. So we conclude that the
+proportionality assumption approximately holds.
+
+## References
+* Mao, L. and Wang, T. (2020). A class of proportional win-fractions regression models for composite outcomes.  *Biometrics*, https://doi.org/10.1111/biom.13382.
+
+* O'Connor, C. M., Whellan, D. J., Lee, K. L., Keteyian, S. J., Cooper, L. S., Ellis, S. J.,
+Leifer, E. S., Kraus, W. E., Kitzman, D. W., Blumenthal, J. A. et al. (2009). Efficacy and
+safety of exercise training in patients with chronic heart failure: HF-ACTION randomized
+controlled trial. *Journal of the American Medical Association*, 301, 1439--1450.
+
+* Pocock, S., Ariti, C., Collier, T., and Wang, D. (2012). The win ratio: a new approach
+to the analysis of composite endpoints in clinical trials based on clinical priorities.
+*European Heart Journal*, 33, 176--182.
+
+
+

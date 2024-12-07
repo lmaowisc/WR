@@ -1,0 +1,212 @@
+---
+title: "Stratified proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event"
+# subtitle: "Application to the German Breast Cancer Study"
+author: "Tuo Wang & Lu Mao (lmao@biostat.wisc.edu)"
+# date: "11/09/2021"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Stratified proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This vignette demonstrates the use of the `WR` package
+in fitting the stratified proportional win-fractions (PW) regression model
+for prioritized composite endpoints consisting of death and a nonfatal event (Wang and Mao, 2022).
+This is an extension of the unstratified PW model of Mao and Wang (2020, *Biometrics*).
+
+## MODEL & INFERENCE
+
+### Outcome data and modeling target
+Let $D$ denote the survival time, $T$ time to the first nonfatal event like hospitalization,
+and $\boldsymbol Z$ a $p$-vector of covariates.
+The composite outcome is $\boldsymbol Y=(D, T)$, with $D$ prioritized over $T$.
+Suppose that there are $L$ strata defined by, e.g., patient demographics or study center.
+In the $l$th stratum $(l=1,\ldots, L)$, if we want to compare the $i$th and $j$th patients,
+denoted respectively using subscripts $li$ and $lj$, 
+we can use Pocock et al.'s (2012) sequential rule with the "win indicator" defined by 
+\begin{align*}
+\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t) 
+& = I(\mbox{subject $i$ wins against subject $j$ by $t$ in stratum $l$})\\ 
+& = I(D_{lj} < D_{li} \wedge t) + I(D_{li} \wedge D_{lj} > t, T_{lj} < T_{li} \wedge t),
+\end{align*}
+where $a\wedge b=\min(a,b)$. 
+Then, the (time-dependent) covariate-specific win ratio in the $l$th stratum is
+\[\mathcal R_l(t;\boldsymbol Z_{li}, \boldsymbol Z_{lj}):=
+\frac{E\{\mathcal W(\boldsymbol Y_{li}, \boldsymbol Y_{lj})(t)\mid \boldsymbol Z_{li}, \boldsymbol Z_{lj}\}}{E\{\mathcal W(\boldsymbol Y_{lj}, \boldsymbol Y_{li})(t)\mid \boldsymbol Z_{li}, \boldsymbol Z_{lj}\}}.\]
+
+### Model specification
+The stratified PW model specifies that
+\begin{equation}\tag{1}
+\mbox{Stratified PW:}\hspace{3mm} \mathcal R_l(t;\boldsymbol Z_{li}, \boldsymbol Z_{lj})=\exp\{\boldsymbol\beta^{\rm T}(\boldsymbol Z_{li} -\boldsymbol Z_{lj})\},\hspace{3mm} l=1,\ldots, L.
+\end{equation}
+That is, we assume that the covariate-specific win ratio in each stratum is invariant to
+the follow-up time (proportionality of the win fractions) and depends on
+a common regression parameter $\boldsymbol\beta$.
+Under model (1), the components of $\boldsymbol\beta$ can be interpreted as the log-win ratios
+associated with unit increases in the corresponding covariates *within each stratum*.
+Because model (1) involves only within-stratum comparisons, it does not require
+proportionality to hold across strata as an unstratified PW model does.
+
+
+### Number of strata and inference procedure
+
+Under (1), we can obtain consistent estimates for the parameter $\boldsymbol\beta$ 
+based on censored data under the independent censoring assumption
+\[(C_{li}\perp \boldsymbol Y_{li})\mid \boldsymbol Z_{li}.\]
+for every $l=1,\ldots, L$. There are two approaches to estimating the variance of the 
+resulting estimator $\boldsymbol\beta$, each appropriate in a different context. 
+When the number of strata $L$ is small, such as in the case of sex or race categories, 
+we can  apply the variance estimator of the unstratified PW model to each stratum 
+and sum up the stratum-specific variances. We call this
+the **type I** variance estimator. 
+When $L$ is large, such as in the case of matched pairs (so that $L=n/2$),
+each stratum need not contain enough subjects to support its own variance estimator.
+We instead treat the strata as basic units of observation and take a 
+Lindeberg--Feller-type approach to quantifying the variance of 
+the sum of the independent (but not necessarily identically
+distributed) units. This gives us a **type II** variance estimator.
+
+
+
+## BASIC SYNTAX
+The input data must be in the "long format", with an `ID` vector
+containing unique patient-level identifiers. In addition, we need a `time` vector containing the event times and a `status` vector indicating the corresponding cause of the event. The vector `status`  should be coded as `1`=death; `2`=non-fatal event; `0`=censoring. In the case of recurrent non-fatal events, multiple rows with `status`=2 are allowed. However, by nature of the method, only time to the first episode will be used. Finally, we need a covariate matrix `Z` with the same row as `ID`.
+Each column of `Z` represents a covariate. All covariates need to be time-constant.
+
+
+The main function to fit the stratified PW model is 
+```{r,eval=F}
+obj<-pwreg(ID, time, status, Z, strata, fixedL=TRUE) 
+```
+with `ID`, `time`, `status`, and `Z` as specified above. 
+The optional argument `strata` accepts the (categorical)
+stratifying variable. The default option `fixedL=TRUE`
+requests the type I variance estimator (under small $L$)
+while `fixedL=FALSE` requests the type II variance estimator  (under large $L$).
+The function returns an object of class `pwreg`
+with a `beta` vector for $\widehat{\boldsymbol\beta}$ 
+and a `Var` matrix for $\text{var}(\widehat{\boldsymbol\beta})$.
+Score processes to check the proportionality assumption can be computed and plotted by
+```{r,eval=F}
+## compute the standardized score processes
+score<-score.proc(obj)
+## plot the computed process for the kth covariate
+plot(score, k)
+```
+As a rule of thumb, we consider the proportionality to be tenable
+if the score processes are bounded in $[-2, 2]$.
+
+
+## AN EXAMPLE WITH THE GERMAN BREAST CANCER STUDY
+We demonstrate the stratified PW regression methods using a subset of the data from the German Breast Cancer study consisting of 686 patients with primary node positive breast cancer (Sauerbrei et al., 1999). 
+
+### Data preparation
+The study was conducted between July 1984 to December 1989
+to assess the effectiveness of hormonal treatment with tamoxifen in addition to standard chemotherapy in reducing the cancer relapse (nonfatal event) and mortality of patients. 
+
+We first load the `WR` package and the analysis dataset `gbc`.
+```{r setup}
+library(WR)
+head(gbc)
+```
+Covariates include:
+
+* `hormone`:  Treatment indicator: 1=Hormone therapy; 2=standard therapy;
+* `age`       Age at diagnosis (years)
+* `menopause` Menopausal Status; 1=No; 2=Yes
+* `grade`     Tumor grade, 1-3
+* `nodes`     Number of nodes involved
+* `prog_recp` Number of progesterone receptors
+* `estrg_recp` Number of estrogen receptors
+
+The `grade` column in `gbc` is a factor variable. We create dummy variables for `grade`.
+```{r}
+grade_matrix <- model.matrix(~factor(grade),data=gbc)
+grade_df <- as.data.frame(grade_matrix[,-1])
+names(grade_df) <- c("grade2 vs grade1", "grade3 vs grade1")
+gbc <- cbind.data.frame(gbc[,-8], grade_df)
+```
+
+
+### Stratification by menopause status
+Next, we fit a PW model stratified by menopause status. Because the stratifying variable
+has only two levels, we use the type I variance estimator.
+```{r}
+## extract the covariate matrix Z from the data
+## leaving out menopause as the stratifying variable
+Z1 <- as.matrix(gbc[,c("hormone", "age", "size", "nodes", "prog_recp",
+                       "estrg_recp", "grade2 vs grade1", "grade3 vs grade1")])
+
+## fit a PW model stratified by the binary menopause status
+## use type I variance estimator
+obj1<-pwreg(ID=gbc$id,time=gbc$time,status=gbc$status, Z=Z1,strata=gbc$menopause,fixedL=TRUE)
+## print out the results
+print(obj1)
+```
+We can see that, adjusting for other variables and stratifying by menopause status,
+hormonal treatment makes the patient 1.5 times as likely to have a more favorable
+outcome (prioritizing survival over cancer relapse), with 95\% confidence interval
+(1.2, 2.0) and $p$-value 0.003.
+Next, plot the standardized score process for each covariate:
+```{r, fig.height = 7.5, fig.width=7.5}
+score1 <- score.proc(obj1)
+oldpar <- par(mfrow = par("mfrow"))
+par(mfrow = c(3,3))
+for(i in c(1:8)){
+  plot(score1, k = i)
+  abline(h = 0, col="blue",lty=2)
+  abline(h = -2, col="blue",lty=2)
+  abline(h =  2, col="blue",lty=2)
+}
+par(oldpar)
+```
+All curves are bounded between -2 and 2, suggesting no severe violation of the proportionality
+assumption.
+
+### Stratification by age
+As illustration, we fit another PW model stratified by finely-cut age groups.
+```{r}
+## cut age into ~30 groups by quantiles
+cutpoints <- c(0,unique(quantile(gbc$age[gbc$status<2],
+                        seq(0.1,1,by=0.02))),Inf)
+cutpoints
+age_group <- cut(gbc$age, breaks = cutpoints, right = FALSE)
+```
+Now that $L>30$, it would be better to use type II variance estimator for inference.
+```{r}
+## extract the covariate matrix Z from the data
+## leaving out age as the stratifying variable
+Z2 <- as.matrix(gbc[,c("hormone", "menopause", "size", "nodes", "prog_recp",
+                       "estrg_recp", "grade2 vs grade1", "grade3 vs grade1")])
+
+## fit a PW model stratified by the binary menopause status
+## use type II variance estimator because L is large
+obj2<-pwreg(ID=gbc$id,time=gbc$time,status=gbc$status, Z=Z2,strata=age_group,fixedL=TRUE)
+## print out the results
+print(obj2)
+```
+We can see that the results are similar to those of the menopause-stratified analysis. 
+One can also check the proportionality assumption
+in a similar way using the `score.proc()` function.
+
+
+## References
+
+* Mao, L. and Wang, T. (2020). A class of proportional win-fractions regression models for composite outcomes. *Biometrics*, https://doi.org/10.1111/biom.13382.
+
+* Pocock, S., Ariti, C., Collier, T., and Wang, D. (2012). The win ratio: a new approach
+to the analysis of composite endpoints in clinical trials based on clinical priorities. *European Heart Journal*, 33, 176--182.
+
+* Sauerbrei, W., Royston, P., Bojar, H., Schmoor, C., & Schumacher, M. (1999). Modelling the effects of standard prognostic factors in node-positive breast cancer. German Breast Cancer Study Group (GBSG). *British Journal of Cancer*, 79, 1752–1760. 
+
+* Wang, T. and Mao, L. (2022). Stratified Proportional Win-fractions Regression Analysis.
+

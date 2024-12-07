@@ -1,0 +1,233 @@
+---
+title: "Two-sample win ratio tests of possibly recurrent event and death"
+author: "Lu Mao (lmao@biostat.wisc.edu)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Two-sample win ratio tests of recurrent event and death}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## INTRODUCTION
+This vignette demonstrates the use of the  `WR` package
+for two-sample win ratio tests of recurrent event and death
+(Mao et al., 2022).
+
+### Data
+Let $D$ denote the survival time and write $N_D(t)=I(D\leq t)$.
+Likewise, let $T_1<T_2<\cdots$ denote the recurrent event
+ times and write $N_H(t)=\sum_{k=1}^\infty I(T_k\leq t)$. In other words,
+$N_H(t)$ is the counting process for the recurrent event.
+Since death is a terminal event,
+we must have that $N_H(t)=N_H(t\wedge D)$,
+where $b\wedge c=\min(b,c)$.
+Let $\boldsymbol Y(t)=\{N_D(u), N_H(u):0\leq u\leq t\}$ denote
+the event history up to time $t$. The full outcome data without
+censoring are thus $\boldsymbol Y:=\boldsymbol Y(\tau)$, where $\tau$ is the maximum
+length of follow-up.
+
+### General framework for hypotheses and tests
+Use $a=1$ to denote the active treatment and $a=0$ to denote the control.
+For all notation introduced above, use the subscript $(a)$ to denote
+the corresponding group-specific quantity. For example, 
+$\boldsymbol Y^{(a)}$ represents the outcome data from group $a$ $(a=1, 0)$.
+Consider a time-dependent win function of the form
+\[\mathcal W(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t) 
+= I(\mbox{patient in group $a$ wins against that in group $1-a$ by
+time $t$}).\]
+The specific definition of $\mathcal W$ will be discussed later.
+
+Given such a rule of cross-group comparison,
+the win and loss probabilities for the treatment against control by time $t$
+are $w(t)=E\{\mathcal W(\boldsymbol Y^{(1)}, \boldsymbol Y^{(0)})(t)\}$
+and $l(t)=E\{\mathcal W(\boldsymbol Y^{(0)}, \boldsymbol Y^{(0)})(t)\}$, respectively.
+Suppose that we wish to test the null hypothesis that
+the win and loss probabilities are equal, i.e.,
+\[H_0: w(t)=l(t)\hspace{2ex}\mbox{for all }t\in[0, \tau],\]
+against the alternative hypothesis that the win probability dominates the
+loss probability, i.e.,
+\begin{equation}\tag{1}
+H_A: w(t)\geq l(t)\hspace{1ex}\mbox{for all }t\in[0, \tau] 
+\mbox{ with strict inequality for some }t.
+\end{equation}
+With censored data,
+a general way to test such hypotheses 
+is to use a log-transformed two-sample win ratio constructed
+similarly to Pocock et al. (2012), only with the pairwise
+rule of comparison replaced by the customized $\mathcal W(\cdot,\cdot)(t)$,
+where $t$ is set as the earlier of the two observed follow-up times. 
+A stratified test can also be developed along the lines of Dong et al. (2018).
+
+
+### Choice of win function
+Different choices of $\mathcal W$ will lead to different hypotheses and tests.
+The standard win ratio (SWR) of Pocock et al. (2012) corresponds to the choice of
+\[\mathcal W_S(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
+=I(D^{(1-a)}<D^{(a)}\wedge t)+I(D^{(a)}\wedge D^{(1-a)}>t, T_1^{(1-a)}<T_1^{(a)}\wedge t).\]
+With recurrent nonfatal event, $\mathcal W_S$ fails to fully exploit the data as it 
+draws only on the first occurrence.
+A more efficient rule is given by the last-event-assisted
+win ratio (LWR), which compares on the nonfatal event first by its cumulative frequency,
+with ties broken by the time of its last episode. In other words,
+\begin{align}
+\mathcal W_L(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
+&=I(D^{(1-a)}<D^{(a)}\wedge t)+I\{D^{(a)}\wedge D^{(1-a)}>t, N_H^{(a)}(t)<N_H^{(1-a)}(t)\}\\
+&\hspace{1ex}+I\{D^{(a)}\wedge D^{(1-a)}>t, N_H^{(a)}(t)=N_H^{(1-a)}(t)=\mbox{ some } k,
+T_k^{(1-a)}<T_k^{(a)}\}.
+\end{align}
+Likewise we can construct a first-event-assisted win ratio (FWR) by replacing the $T_k^{(a)}$
+with the $T_1^{(a)}$, or a naive win ratio (NWR) by removing the tie-breaking
+third term altogether (see Mao et al. (2022) for details).
+Nonetheless, it is recommended that the LWR be used as the default, as it
+makes fuller use of the data and reduces to the SWR when the nonfatal event
+occurs at most once.
+
+Under the LWR, a simple condition that implies the dominance of win probability
+in (1) is a joint stochastic
+order of the event times between the two groups:
+\begin{equation}\tag{2}
+{P}(D^{(1)}>s, T^{(1)}_{1}>t_1, T^{(1)}_{2}>t_2, \ldots)>
+{P}(D^{(0)}>s, T^{(0)}_{1}>t_1, T^{(0)}_{2}>t_2, \ldots),
+\end{equation}
+for all $0\leq t_1\leq t_2\leq\cdots\leq s\leq\tau$.
+Expression (2) means that the treatment stochastically delays
+ all events, fatal and nonfatal, jointly
+as compared to the control. Hence, when (2) is true,
+the LWR test rejects $H_0$ with probability tending to 1
+as the sample size increases to infinity.
+
+## BASIC SYNTAX
+The basic function to perform the win ratio tests is `WRrec()`.
+To use the function, the input data must be 
+in the "long" format. Specifically, we need an `ID` variable containing
+the unique patient identifiers,  a `time` variable containing the event times,
+a `status` variable labeling the event type (`status=2` for recurrent non-fatal
+event, `=1` for death, and `=0` for censoring),
+and, finally, a binary `trt` variable with 1 indicating the treatment
+and 0 indicating the control.
+To perform an unstratified LWR test, use
+```{r,eval=F}
+obj<-WRrec(ID,time,status,trt)
+```
+For a stratified test, supply a vector of stratifying (categorical) variable
+through an additional `strata=` argument. To get test results from FWR
+and NWR as well, add the option `naive=TRUE`. 
+Printing the object `obj` gives us the $p$-values of the tests
+as well as some descriptive statistics.
+
+## AN EXAMPLE WITH THE HF-ACTION TRIAL
+
+### Data description
+To illustrate the win ratio tests, consider
+the Heart Failure: A Controlled Trial Investigating Outcomes of Exercise Training (HF-ACTION)
+trial. A randomized controlled trial, HF-ACTION was conducted on a cohort of over two thousand 
+heart failure patients recruited between 2003--2007 across the USA, Canada, and France (O'Connor
+et al., 2009). The study aimed to assess the effect of adding aerobic exercise 
+training to usual care on the patient's composite endpoint of all-cause death and all-cause hospitalization. The primary analysis of the whole study population showed a moderate 
+and non-significant reduction in the risk of time to the first composite event 
+ (hazard ratio 0.93; $p$-value 0.13).
+Here we focus on a subgroup of non-ischemic patients with reduced cardio-pulmonary exercise (CPX)
+test duration (i.e., $\leq 9$ minutes before reporting of discomfort). There are scientific and empirical evidence 
+suggesting that this particular sub-population may benefit more from exercise training interventions than does
+the average heart failure patient.
+
+The associated dataset `hfaction_cpx9` is contained in the `WR` package and can be
+loaded by
+```{r setup}
+library(WR)
+head(hfaction_cpx9)
+```
+The dataset is already in a format suitable for `WRrec()` 
+(`status`= 2 for hospitalization and = 1 for death).
+The `time` variable is in units of months and `trt=0` for usual care (control)
+and `1` for exercise training. 
+The `age60` variable is an indicator of patient age being greater
+than or equal to 60 years and can potentially serve as a stratifying variable.
+
+
+### Win ratio tests on recurrent event and death
+To perform the win ratio tests between exercise training and usual care 
+stratified by age, use the code
+
+```{r}
+## simplify the dataset name
+dat<-hfaction_cpx9
+## comparing exercise training to usual care by LWR, FWR, and NWR
+obj<-WRrec(ID=dat$patid,time=dat$time,status=dat$status,
+          trt=dat$trt_ab,strata=dat$age60,naive=TRUE)
+## print the results
+obj
+```
+
+We can see from the output above that 57 (25.8\%) out of
+221 patients died in usual care, with an average of $571/221=2.6$
+hospitalizations per patient;
+and that 36 (17.6\%) out of 205 patients died in exercise training 
+with an average of $451/205=2.2$ hospitalizations per patient.
+Clearly, those undergoing exercise training are doing much better
+in terms of both overall survival and recurrent hospitalization.
+
+Following the descriptive statistics are
+the analysis results by the LWR, FWR, and NWR. 
+Although estimates of overall win and loss probabilities,
+as well as the win ratio, are provided, their magnitudes are generally
+dependent on the censoring distribution and should thus be interpreted
+with caution. On the other hand, the $p$-values are from valid
+tests of the null and alternative hypotheses discussed in the earlier
+section. We can see that all three tests yield $p$-values less
+than the conventional threshold 0.05, suggesting that exercise training
+significantly reduces mortality and recurrent hospitalization.
+
+### Comparison with standard win ratio
+To compare with the SWR, we first create a dataset where only the first
+hospitalization is retained.
+```{r}
+######################################
+## Remove recurrent hospitalization ##
+######################################
+## sort dataset by patid and time
+o<-order(dat$patid,dat$time)
+dat<-dat[o,]
+## retain only the first hospitalization
+datHF<-dat[!duplicated(dat[c("patid","status")]),]
+head(datHF)
+```
+
+Then we perform the SWR test by applying the same procedure for the LWR
+to the reduced dataset (which in this case is equivalent to the SWR).
+```{r}
+## Perform the standard win ratio test
+objSWR<-WRrec(ID=datHF$patid,time=datHF$time,status=datHF$status,
+          trt=datHF$trt_ab,strata=datHF$age60)
+## print the results
+objSWR
+```
+
+We can see that the test result is only borderline significant, possibly
+due to less efficient use of the recurrent-event data.
+
+
+## References
+* Dong, G., Qiu, J., Wang, D., & Vandemeulebroecke, M. (2018).
+The stratified win ratio. *Journal of Biopharmaceutical Statistics*, 28, 778--796.
+
+* Mao, L., Kim, K., & Li, Y. (2022). On recurrent-event win ratio.
+*Statistical Methods in Medical Research*, under review.
+
+
+* O'Connor, C. M., Whellan, D. J., Lee, K. L., Keteyian, S. J., Cooper, L. S., Ellis, S. J.,
+Leifer, E. S., Kraus, W. E., Kitzman, D. W., Blumenthal, J. A. et al. (2009). "Efficacy and
+safety of exercise training in patients with chronic heart failure: HF-ACTION randomized
+controlled trial". *Journal of the American Medical Association*, 301, 1439--1450.
+
+* Pocock, S., Ariti, C., Collier, T., and Wang, D. (2012). The win ratio: a new approach
+to the analysis of composite endpoints in clinical trials based on clinical priorities.
+*European Heart Journal*, 33, 176--182.
+
