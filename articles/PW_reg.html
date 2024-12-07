@@ -6,11 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event • WR</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Proportional win-fractions (PW) regression of composite endpoints of death and nonfatal event">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -76,41 +77,38 @@ al. (2012).</p>
 <div class="section level2">
 <h2 id="model-specification">MODEL SPECIFICATION<a class="anchor" aria-label="anchor" href="#model-specification"></a>
 </h2>
-<p>Let <span class="math inline">\(D\)</span> denote the survival time,
-<span class="math inline">\(T\)</span> time to the first nonfatal event
-like hospitalization, and <span class="math inline">\(\boldsymbol
-Z\)</span> a <span class="math inline">\(p\)</span>-vector of
-covariates. The composite outcome is <span class="math inline">\(\boldsymbol Y=(D, T)\)</span> with <span class="math inline">\(D\)</span> prioritized over <span class="math inline">\(T\)</span>. If the <span class="math inline">\(i\)</span>th and <span class="math inline">\(j\)</span>th patients are both followed up to time
-<span class="math inline">\(t\)</span>, define <span class="math display">\[\mathcal W(\boldsymbol Y_i, \boldsymbol Y_j)(t) =
-I(\mbox{subject $i$ wins against subject $j$ by $t$}) = I(D_j &lt; D_i
-\wedge t) + I(D_i \wedge D_j &gt; t, T_j &lt; T_i \wedge t),\]</span>
-where <span class="math inline">\(a\wedge b=\min(a,b)\)</span>. This
-‘’win indicator’’ uses the sequential comparison rule of Pocock et
-al. (2012).</p>
-<p>Then, the covariate-specific win ratio at <span class="math inline">\(t\)</span> is <span class="math display">\[WR(t;\boldsymbol Z_i, \boldsymbol
+<p>Let <span class="math inline">D</span> denote the survival time,
+<span class="math inline">T</span> time to the first nonfatal event like
+hospitalization, and <span class="math inline">\boldsymbol Z</span> a
+<span class="math inline">p</span>-vector of covariates. The composite
+outcome is <span class="math inline">\boldsymbol Y=(D, T)</span> with
+<span class="math inline">D</span> prioritized over <span class="math inline">T</span>. If the <span class="math inline">i</span>th and <span class="math inline">j</span>th
+patients are both followed up to time <span class="math inline">t</span>, define <span class="math display">\mathcal
+W(\boldsymbol Y_i, \boldsymbol Y_j)(t) = I(\mbox{subject $i$ wins
+against subject $j$ by $t$}) = I(D_j &lt; D_i \wedge t) + I(D_i \wedge
+D_j &gt; t, T_j &lt; T_i \wedge t),</span> where <span class="math inline">a\wedge b=\min(a,b)</span>. This ‘’win indicator’’
+uses the sequential comparison rule of Pocock et al. (2012).</p>
+<p>Then, the covariate-specific win ratio at <span class="math inline">t</span> is <span class="math display">WR(t;\boldsymbol Z_i, \boldsymbol
 Z_j):=\frac{E\{\mathcal W(\boldsymbol Y_i, \boldsymbol Y_j)(t)\mid
 \boldsymbol Z_i, \boldsymbol Z_j\}}{E\{\mathcal W(\boldsymbol Y_j,
-\boldsymbol Y_i)(t)\mid \boldsymbol Z_i, \boldsymbol Z_j\}}.\]</span>
-For example, if subject <span class="math inline">\(i\)</span> is from
-the treatment arm with <span class="math inline">\(\boldsymbol
-Z_i=1\)</span> and subject <span class="math inline">\(j\)</span> is
-from the treatment arm with <span class="math inline">\(\boldsymbol
-Z_j=0\)</span>, then <span class="math inline">\(WR(t;\boldsymbol Z_i,
-\boldsymbol Z_j)\)</span> is precisely the estimand of Pocock’s win
-ratio comparing the treatment to the control when all subjects in both
-arms are followed to time <span class="math inline">\(t\)</span>.</p>
-<p>The PW model specifies that <span class="math display">\[\mbox{PW
+\boldsymbol Y_i)(t)\mid \boldsymbol Z_i, \boldsymbol Z_j\}}.</span> For
+example, if subject <span class="math inline">i</span> is from the
+treatment arm with <span class="math inline">\boldsymbol Z_i=1</span>
+and subject <span class="math inline">j</span> is from the treatment arm
+with <span class="math inline">\boldsymbol Z_j=0</span>, then <span class="math inline">WR(t;\boldsymbol Z_i, \boldsymbol Z_j)</span> is
+precisely the estimand of Pocock’s win ratio comparing the treatment to
+the control when all subjects in both arms are followed to time <span class="math inline">t</span>.</p>
+<p>The PW model specifies that <span class="math display">\mbox{PW
 Model: }\hspace{3mm} WR(t;\boldsymbol Z_i, \boldsymbol
 Z_j)=\exp\{\boldsymbol\beta^{\rm T}(\boldsymbol Z_i -\boldsymbol
-Z_j)\}.\]</span> Clearly, the PW model assumes that win ratio is
-invariant to the follow-up time (proportionality assumption). Under the
-model, the components of <span class="math inline">\(\boldsymbol\beta\)</span> can be interpreted as
-the log win ratios associated with unit increases in the corresponding
-covariates. Under the PW model, we can obtain consistent estimates for
-the parameter <span class="math inline">\(\boldsymbol\beta\)</span>
-based on censored data regardless of distribution of the censoring time
-<span class="math inline">\(C\)</span> as long as <span class="math display">\[(C\perp \boldsymbol Y)\mid \boldsymbol
-Z.\]</span></p>
+Z_j)\}.</span> Clearly, the PW model assumes that win ratio is invariant
+to the follow-up time (proportionality assumption). Under the model, the
+components of <span class="math inline">\boldsymbol\beta</span> can be
+interpreted as the log win ratios associated with unit increases in the
+corresponding covariates. Under the PW model, we can obtain consistent
+estimates for the parameter <span class="math inline">\boldsymbol\beta</span> based on censored data
+regardless of distribution of the censoring time <span class="math inline">C</span> as long as <span class="math display">(C\perp \boldsymbol Y)\mid \boldsymbol
+Z.</span></p>
 </div>
 <div class="section level2">
 <h2 id="basic-syntax">BASIC SYNTAX<a class="anchor" aria-label="anchor" href="#basic-syntax"></a>
@@ -129,9 +127,9 @@ need a covariate matrix <code>Z</code> with the same row as
 All covariates need to be time-constant.</p>
 <p>The main function to fit the PW model is
 <code>pwreg(time,status, Z, ID)</code>. The function returns an object
-of class <code>pwreg</code> with a <code>beta</code> vector for <span class="math inline">\(\widehat{\boldsymbol\beta}\)</span> and a
-<code>Var</code> matrix for <span class="math inline">\(\text{var}(\widehat{\boldsymbol\beta})\)</span>.
-For details, refer to documentation of the <code>WR</code> package.</p>
+of class <code>pwreg</code> with a <code>beta</code> vector for <span class="math inline">\widehat{\boldsymbol\beta}</span> and a
+<code>Var</code> matrix for <span class="math inline">\text{var}(\widehat{\boldsymbol\beta})</span>. For
+details, refer to documentation of the <code>WR</code> package.</p>
 </div>
 <div class="section level2">
 <h2 id="an-example-with-the-hf-action-trial">AN EXAMPLE WITH THE HF-ACTION TRIAL<a class="anchor" aria-label="anchor" href="#an-example-with-the-hf-action-trial"></a>
@@ -177,7 +175,7 @@ all-cause hospitalization.</p>
 <span><span class="co"># median length of follow-up time</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">non_ischemic</span><span class="op">$</span><span class="va">time</span><span class="op">[</span><span class="va">non_ischemic</span><span class="op">$</span><span class="va">status</span><span class="op">&lt;</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="fl">30.5</span></span>
 <span><span class="co">#&gt; [1] 31.63934</span></span></code></pre></div>
-<p>So we indeed have <span class="math inline">\(n=451\)</span> unique
+<p>So we indeed have <span class="math inline">n=451</span> unique
 patients with a median follow-up of 31.6 months.</p>
 <p>Next, we use the <code><a href="../reference/pwreg.html">pwreg()</a></code> function to fit the PW
 model:</p>
@@ -251,29 +249,28 @@ model:</p>
 <span><span class="co">#&gt; Smoker            0.9415433    0.6770144     1.3094312</span></span></code></pre></div>
 <p>The output consists of three parts. The first part presents some
 descriptive statistics on the proportions of win-loss status among all
-<span class="math inline">\({n\choose 2}=101,475\)</span> pairs.
-According to the output, <span class="math inline">\(7.5\%\)</span> of
-them are determined by death; <span class="math inline">\(77.2\%\)</span> by hospitalization, and the
-remaining <span class="math inline">\(7.2\%\)</span> are indeterminate.
-It also reports an overall (Wald) test with <span class="math inline">\(p\)</span>-value 0.024, suggesting that, at the
-conventional 0.05 level, the 13 covariates are significantly associated
-with the composite outcome.</p>
+<span class="math inline">{n\choose 2}=101,475</span> pairs. According
+to the output, <span class="math inline">7.5\%</span> of them are
+determined by death; <span class="math inline">77.2\%</span> by
+hospitalization, and the remaining <span class="math inline">7.2\%</span> are indeterminate. It also reports an
+overall (Wald) test with <span class="math inline">p</span>-value 0.024,
+suggesting that, at the conventional 0.05 level, the 13 covariates are
+significantly associated with the composite outcome.</p>
 <p>The second part presents a table for the estimates and standard
 errors of the regression coefficient, along with their corresponding
-<span class="math inline">\(p\)</span>-value for testing the coefficient
+<span class="math inline">p</span>-value for testing the coefficient
 being zero. The third part is perhaps the most informative, tabulating
 the estimated win ratios (exponential of the regression coefficients)
-and their associated <span class="math inline">\(95\%\)</span>
-confidence intervals. We can see that a patient in exercise training is
-<span class="math inline">\(21\%\)</span> more likely to have a better
+and their associated <span class="math inline">95\%</span> confidence
+intervals. We can see that a patient in exercise training is <span class="math inline">21\%</span> more likely to have a better
 priority-adjusted composite outcome than one in usual care. However,
 this difference is statistically not significant. In addition, younger
 age, white race, higher LVEF are significantly associated with more
 favorable outcomes than otherwise, while the beneficial effects of low
 BMI and absence of COPD history are border-line significant.</p>
 <p>To assess the effect of race on the composite outcome, we test the
-null hypothesis <span class="math display">\[H_0:\beta_4=\beta_5=0.\]</span> We conduct a 2-df
-Chi-square Wald test based on <span class="math inline">\((\widehat\beta_4,\widehat\beta_5)^{T}\)</span>:</p>
+null hypothesis <span class="math display">H_0:\beta_4=\beta_5=0.</span>
+We conduct a 2-df Chi-square Wald test based on <span class="math inline">(\widehat\beta_4,\widehat\beta_5)^{T}</span>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#extract estimates of (\beta_4,\beta_5)</span></span>
 <span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="va">pwreg.obj</span><span class="op">$</span><span class="va">beta</span><span class="op">[</span><span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
@@ -287,8 +284,8 @@ Chi-square Wald test based on <span class="math inline">\((\widehat\beta_4,\wide
 <span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">pchisq</a></span><span class="op">(</span><span class="va">chistats</span>, df<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           [,1]</span></span>
 <span><span class="co">#&gt; [1,] 0.1016988</span></span></code></pre></div>
-<p>The <span class="math inline">\(p\)</span>-value is 0.102. So the
-overall effect of race on the composite outcome is non-significant.</p>
+<p>The <span class="math inline">p</span>-value is 0.102. So the overall
+effect of race on the composite outcome is non-significant.</p>
 <p>Finally, we use the <code><a href="../reference/score.proc.html">score.proc()</a></code> function to plot the
 standardized score process for each covariate:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

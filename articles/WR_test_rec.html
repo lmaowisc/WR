@@ -6,11 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Two-sample win ratio tests of possibly recurrent event and death • WR</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample win ratio tests of possibly recurrent event and death">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-sample win ratio tests of possibly recurrent event and death">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -76,88 +77,88 @@ two-sample win ratio tests of recurrent event and death (Mao et al.,
 <div class="section level3">
 <h3 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
 </h3>
-<p>Let <span class="math inline">\(D\)</span> denote the survival time
-and write <span class="math inline">\(N_D(t)=I(D\leq t)\)</span>.
-Likewise, let <span class="math inline">\(T_1&lt;T_2&lt;\cdots\)</span>
-denote the recurrent event times and write <span class="math inline">\(N_H(t)=\sum_{k=1}^\infty I(T_k\leq t)\)</span>. In
-other words, <span class="math inline">\(N_H(t)\)</span> is the counting
+<p>Let <span class="math inline">D</span> denote the survival time and
+write <span class="math inline">N_D(t)=I(D\leq t)</span>. Likewise, let
+<span class="math inline">T_1&lt;T_2&lt;\cdots</span> denote the
+recurrent event times and write <span class="math inline">N_H(t)=\sum_{k=1}^\infty I(T_k\leq t)</span>. In
+other words, <span class="math inline">N_H(t)</span> is the counting
 process for the recurrent event. Since death is a terminal event, we
-must have that <span class="math inline">\(N_H(t)=N_H(t\wedge
-D)\)</span>, where <span class="math inline">\(b\wedge
-c=\min(b,c)\)</span>. Let <span class="math inline">\(\boldsymbol
-Y(t)=\{N_D(u), N_H(u):0\leq u\leq t\}\)</span> denote the event history
-up to time <span class="math inline">\(t\)</span>. The full outcome data
-without censoring are thus <span class="math inline">\(\boldsymbol
-Y:=\boldsymbol Y(\tau)\)</span>, where <span class="math inline">\(\tau\)</span> is the maximum length of
-follow-up.</p>
+must have that <span class="math inline">N_H(t)=N_H(t\wedge D)</span>,
+where <span class="math inline">b\wedge c=\min(b,c)</span>. Let <span class="math inline">\boldsymbol Y(t)=\{N_D(u), N_H(u):0\leq u\leq
+t\}</span> denote the event history up to time <span class="math inline">t</span>. The full outcome data without censoring
+are thus <span class="math inline">\boldsymbol Y:=\boldsymbol
+Y(\tau)</span>, where <span class="math inline">\tau</span> is the
+maximum length of follow-up.</p>
 </div>
 <div class="section level3">
 <h3 id="general-framework-for-hypotheses-and-tests">General framework for hypotheses and tests<a class="anchor" aria-label="anchor" href="#general-framework-for-hypotheses-and-tests"></a>
 </h3>
-<p>Use <span class="math inline">\(a=1\)</span> to denote the active
-treatment and <span class="math inline">\(a=0\)</span> to denote the
-control. For all notation introduced above, use the subscript <span class="math inline">\((a)\)</span> to denote the corresponding
-group-specific quantity. For example, <span class="math inline">\(\boldsymbol Y^{(a)}\)</span> represents the
-outcome data from group <span class="math inline">\(a\)</span> <span class="math inline">\((a=1, 0)\)</span>. Consider a time-dependent win
-function of the form <span class="math display">\[\mathcal W(\boldsymbol
+<p>Use <span class="math inline">a=1</span> to denote the active
+treatment and <span class="math inline">a=0</span> to denote the
+control. For all notation introduced above, use the subscript <span class="math inline">(a)</span> to denote the corresponding
+group-specific quantity. For example, <span class="math inline">\boldsymbol Y^{(a)}</span> represents the outcome
+data from group <span class="math inline">a</span> <span class="math inline">(a=1, 0)</span>. Consider a time-dependent win
+function of the form <span class="math display">\mathcal W(\boldsymbol
 Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
 = I(\mbox{patient in group $a$ wins against that in group $1-a$ by
-time $t$}).\]</span> The specific definition of <span class="math inline">\(\mathcal W\)</span> will be discussed later.</p>
+time $t$}).</span> The specific definition of <span class="math inline">\mathcal W</span> will be discussed later.</p>
 <p>Given such a rule of cross-group comparison, the win and loss
-probabilities for the treatment against control by time <span class="math inline">\(t\)</span> are <span class="math inline">\(w(t)=E\{\mathcal W(\boldsymbol Y^{(1)},
-\boldsymbol Y^{(0)})(t)\}\)</span> and <span class="math inline">\(l(t)=E\{\mathcal W(\boldsymbol Y^{(0)},
-\boldsymbol Y^{(0)})(t)\}\)</span>, respectively. Suppose that we wish
-to test the null hypothesis that the win and loss probabilities are
-equal, i.e., <span class="math display">\[H_0:
-w(t)=l(t)\hspace{2ex}\mbox{for all }t\in[0, \tau],\]</span> against the
+probabilities for the treatment against control by time <span class="math inline">t</span> are <span class="math inline">w(t)=E\{\mathcal W(\boldsymbol Y^{(1)}, \boldsymbol
+Y^{(0)})(t)\}</span> and <span class="math inline">l(t)=E\{\mathcal
+W(\boldsymbol Y^{(0)}, \boldsymbol Y^{(0)})(t)\}</span>, respectively.
+Suppose that we wish to test the null hypothesis that the win and loss
+probabilities are equal, i.e., <span class="math display">H_0:
+w(t)=l(t)\hspace{2ex}\mbox{for all }t\in[0, \tau],</span> against the
 alternative hypothesis that the win probability dominates the loss
-probability, i.e., <span class="math display">\[\begin{equation}\tag{1}
+probability, i.e., <span class="math display">\begin{equation}\tag{1}
 H_A: w(t)\geq l(t)\hspace{1ex}\mbox{for all }t\in[0, \tau]
 \mbox{ with strict inequality for some }t.
-\end{equation}\]</span> With censored data, a general way to test such
+\end{equation}</span> With censored data, a general way to test such
 hypotheses is to use a log-transformed two-sample win ratio constructed
 similarly to Pocock et al. (2012), only with the pairwise rule of
-comparison replaced by the customized <span class="math inline">\(\mathcal W(\cdot,\cdot)(t)\)</span>, where <span class="math inline">\(t\)</span> is set as the earlier of the two
-observed follow-up times. A stratified test can also be developed along
-the lines of Dong et al. (2018).</p>
+comparison replaced by the customized <span class="math inline">\mathcal
+W(\cdot,\cdot)(t)</span>, where <span class="math inline">t</span> is
+set as the earlier of the two observed follow-up times. A stratified
+test can also be developed along the lines of Dong et al. (2018).</p>
 </div>
 <div class="section level3">
 <h3 id="choice-of-win-function">Choice of win function<a class="anchor" aria-label="anchor" href="#choice-of-win-function"></a>
 </h3>
-<p>Different choices of <span class="math inline">\(\mathcal W\)</span>
-will lead to different hypotheses and tests. The standard win ratio
-(SWR) of Pocock et al. (2012) corresponds to the choice of <span class="math display">\[\mathcal W_S(\boldsymbol Y^{(a)}, \boldsymbol
+<p>Different choices of <span class="math inline">\mathcal W</span> will
+lead to different hypotheses and tests. The standard win ratio (SWR) of
+Pocock et al. (2012) corresponds to the choice of <span class="math display">\mathcal W_S(\boldsymbol Y^{(a)}, \boldsymbol
 Y^{(1-a)})(t)
 =I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I(D^{(a)}\wedge D^{(1-a)}&gt;t,
-T_1^{(1-a)}&lt;T_1^{(a)}\wedge t).\]</span> With recurrent nonfatal
-event, <span class="math inline">\(\mathcal W_S\)</span> fails to fully
-exploit the data as it draws only on the first occurrence. A more
-efficient rule is given by the last-event-assisted win ratio (LWR),
-which compares on the nonfatal event first by its cumulative frequency,
-with ties broken by the time of its last episode. In other words, <span class="math display">\[\begin{align}
+T_1^{(1-a)}&lt;T_1^{(a)}\wedge t).</span> With recurrent nonfatal event,
+<span class="math inline">\mathcal W_S</span> fails to fully exploit the
+data as it draws only on the first occurrence. A more efficient rule is
+given by the last-event-assisted win ratio (LWR), which compares on the
+nonfatal event first by its cumulative frequency, with ties broken by
+the time of its last episode. In other words, <span class="math display">\begin{align}
 \mathcal W_L(\boldsymbol Y^{(a)}, \boldsymbol Y^{(1-a)})(t)
 &amp;=I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I\{D^{(a)}\wedge D^{(1-a)}&gt;t,
 N_H^{(a)}(t)&lt;N_H^{(1-a)}(t)\}\\
 &amp;\hspace{1ex}+I\{D^{(a)}\wedge D^{(1-a)}&gt;t,
 N_H^{(a)}(t)=N_H^{(1-a)}(t)=\mbox{ some } k,
 T_k^{(1-a)}&lt;T_k^{(a)}\}.
-\end{align}\]</span> Likewise we can construct a first-event-assisted
-win ratio (FWR) by replacing the <span class="math inline">\(T_k^{(a)}\)</span> with the <span class="math inline">\(T_1^{(a)}\)</span>, or a naive win ratio (NWR) by
-removing the tie-breaking third term altogether (see Mao et al. (2022)
-for details). Nonetheless, it is recommended that the LWR be used as the
-default, as it makes fuller use of the data and reduces to the SWR when
-the nonfatal event occurs at most once.</p>
+\end{align}</span> Likewise we can construct a first-event-assisted win
+ratio (FWR) by replacing the <span class="math inline">T_k^{(a)}</span>
+with the <span class="math inline">T_1^{(a)}</span>, or a naive win
+ratio (NWR) by removing the tie-breaking third term altogether (see Mao
+et al. (2022) for details). Nonetheless, it is recommended that the LWR
+be used as the default, as it makes fuller use of the data and reduces
+to the SWR when the nonfatal event occurs at most once.</p>
 <p>Under the LWR, a simple condition that implies the dominance of win
 probability in (1) is a joint stochastic order of the event times
-between the two groups: <span class="math display">\[\begin{equation}\tag{2}
+between the two groups: <span class="math display">\begin{equation}\tag{2}
 {P}(D^{(1)}&gt;s, T^{(1)}_{1}&gt;t_1, T^{(1)}_{2}&gt;t_2, \ldots)&gt;
 {P}(D^{(0)}&gt;s, T^{(0)}_{1}&gt;t_1, T^{(0)}_{2}&gt;t_2, \ldots),
-\end{equation}\]</span> for all <span class="math inline">\(0\leq
-t_1\leq t_2\leq\cdots\leq s\leq\tau\)</span>. Expression (2) means that
-the treatment stochastically delays all events, fatal and nonfatal,
-jointly as compared to the control. Hence, when (2) is true, the LWR
-test rejects <span class="math inline">\(H_0\)</span> with probability
-tending to 1 as the sample size increases to infinity.</p>
+\end{equation}</span> for all <span class="math inline">0\leq t_1\leq
+t_2\leq\cdots\leq s\leq\tau</span>. Expression (2) means that the
+treatment stochastically delays all events, fatal and nonfatal, jointly
+as compared to the control. Hence, when (2) is true, the LWR test
+rejects <span class="math inline">H_0</span> with probability tending to
+1 as the sample size increases to infinity.</p>
 </div>
 </div>
 <div class="section level2">
@@ -179,8 +180,8 @@ test, use</p>
 variable through an additional <code>strata=</code> argument. To get
 test results from FWR and NWR as well, add the option
 <code>naive=TRUE</code>. Printing the object <code>obj</code> gives us
-the <span class="math inline">\(p\)</span>-values of the tests as well
-as some descriptive statistics.</p>
+the <span class="math inline">p</span>-values of the tests as well as
+some descriptive statistics.</p>
 </div>
 <div class="section level2">
 <h2 id="an-example-with-the-hf-action-trial">AN EXAMPLE WITH THE HF-ACTION TRIAL<a class="anchor" aria-label="anchor" href="#an-example-with-the-hf-action-trial"></a>
@@ -197,13 +198,13 @@ The study aimed to assess the effect of adding aerobic exercise training
 to usual care on the patient’s composite endpoint of all-cause death and
 all-cause hospitalization. The primary analysis of the whole study
 population showed a moderate and non-significant reduction in the risk
-of time to the first composite event (hazard ratio 0.93; <span class="math inline">\(p\)</span>-value 0.13). Here we focus on a
-subgroup of non-ischemic patients with reduced cardio-pulmonary exercise
-(CPX) test duration (i.e., <span class="math inline">\(\leq 9\)</span>
-minutes before reporting of discomfort). There are scientific and
-empirical evidence suggesting that this particular sub-population may
-benefit more from exercise training interventions than does the average
-heart failure patient.</p>
+of time to the first composite event (hazard ratio 0.93; <span class="math inline">p</span>-value 0.13). Here we focus on a subgroup of
+non-ischemic patients with reduced cardio-pulmonary exercise (CPX) test
+duration (i.e., <span class="math inline">\leq 9</span> minutes before
+reporting of discomfort). There are scientific and empirical evidence
+suggesting that this particular sub-population may benefit more from
+exercise training interventions than does the average heart failure
+patient.</p>
 <p>The associated dataset <code>hfaction_cpx9</code> is contained in the
 <code>WR</code> package and can be loaded by</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -254,22 +255,21 @@ care stratified by age, use the code</p>
 <span><span class="co">#&gt; *Note: The scale of WR should be interpreted with caution as it depends on </span></span>
 <span><span class="co">#&gt; censoring distribution without modeling assumptions.</span></span></code></pre></div>
 <p>We can see from the output above that 57 (25.8%) out of 221 patients
-died in usual care, with an average of <span class="math inline">\(571/221=2.6\)</span> hospitalizations per patient;
-and that 36 (17.6%) out of 205 patients died in exercise training with
-an average of <span class="math inline">\(451/205=2.2\)</span>
-hospitalizations per patient. Clearly, those undergoing exercise
-training are doing much better in terms of both overall survival and
-recurrent hospitalization.</p>
+died in usual care, with an average of <span class="math inline">571/221=2.6</span> hospitalizations per patient; and
+that 36 (17.6%) out of 205 patients died in exercise training with an
+average of <span class="math inline">451/205=2.2</span> hospitalizations
+per patient. Clearly, those undergoing exercise training are doing much
+better in terms of both overall survival and recurrent
+hospitalization.</p>
 <p>Following the descriptive statistics are the analysis results by the
 LWR, FWR, and NWR. Although estimates of overall win and loss
 probabilities, as well as the win ratio, are provided, their magnitudes
 are generally dependent on the censoring distribution and should thus be
-interpreted with caution. On the other hand, the <span class="math inline">\(p\)</span>-values are from valid tests of the null
-and alternative hypotheses discussed in the earlier section. We can see
-that all three tests yield <span class="math inline">\(p\)</span>-values
-less than the conventional threshold 0.05, suggesting that exercise
-training significantly reduces mortality and recurrent
-hospitalization.</p>
+interpreted with caution. On the other hand, the <span class="math inline">p</span>-values are from valid tests of the null and
+alternative hypotheses discussed in the earlier section. We can see that
+all three tests yield <span class="math inline">p</span>-values less
+than the conventional threshold 0.05, suggesting that exercise training
+significantly reduces mortality and recurrent hospitalization.</p>
 </div>
 <div class="section level3">
 <h3 id="comparison-with-standard-win-ratio">Comparison with standard win ratio<a class="anchor" aria-label="anchor" href="#comparison-with-standard-win-ratio"></a>

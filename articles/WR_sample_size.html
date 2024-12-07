@@ -6,11 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Sample size calculation for standard win ratio test • WR</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sample size calculation for standard win ratio test">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Sample size calculation for standard win ratio test">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -77,32 +78,37 @@ al., 2021, <em>Biometrics</em>).</p>
 <div class="section level3">
 <h3 id="data-and-the-test">Data and the test<a class="anchor" aria-label="anchor" href="#data-and-the-test"></a>
 </h3>
-<p>Let <span class="math inline">\(D^{(a)}\)</span> denote the survival
-time and <span class="math inline">\(T^{(a)}\)</span> the first nonfatal
-event time of a patient in group <span class="math inline">\(a\)</span>,
-where <span class="math inline">\(a=1\)</span> indicates the active
-treatment and <span class="math inline">\(a=0\)</span> indicates the
-control. Likewise, use <span class="math inline">\(C^{(a)}\)</span> to
-denote the independent censoring time. In the standard win ratio of
-Pocock et al. (2012), the “win” indicator at time <span class="math inline">\(t\)</span> can be written as <span class="math display">\[\mathcal W(D^{(a)},T^{(a)};
+<p>Let <span class="math inline">D^{(a)}</span> denote the survival time
+and <span class="math inline">T^{(a)}</span> the first nonfatal event
+time of a patient in group <span class="math inline">a</span>, where
+<span class="math inline">a=1</span> indicates the active treatment and
+<span class="math inline">a=0</span> indicates the control. Likewise,
+use <span class="math inline">C^{(a)}</span> to denote the independent
+censoring time. In the standard win ratio of Pocock et al. (2012), the
+“win” indicator at time <span class="math inline">t</span> can be
+written as <span class="math display">\mathcal W(D^{(a)},T^{(a)};
 D^{(1-a)},T^{(1-a)})(t)=
 I(D^{(1-a)}&lt;D^{(a)}\wedge t)+I(D^{(a)}\wedge D^{(1-a)}&gt;t,
-T^{(1-a)}&lt;T^{(a)}\wedge t),\]</span> where <span class="math inline">\(b\wedge c=\min(b, c)\)</span>. So the winner goes
-to the longer overall survivor or, if both survive past <span class="math inline">\(t\)</span>, the longer event-free survivor. Tweaks
-to this rule to incorporate recurrent event are considered in Mao et
+T^{(1-a)}&lt;T^{(a)}\wedge t),</span> where <span class="math inline">b\wedge c=\min(b, c)</span>. So the winner goes to
+the longer overall survivor or, if both survive past <span class="math inline">t</span>, the longer event-free survivor. Tweaks to
+this rule to incorporate recurrent event are considered in Mao et
 al. (2022).</p>
-<p>Using this notation, Pocock’s win ratio statistic becomes <span class="math display">\[\begin{equation}\tag{1}
+<p>Using this notation, Pocock’s win ratio statistic becomes <span class="math display">\begin{equation}\tag{1}
 S_n=\frac{\sum_{i=1}^{n_1}\sum_{j=1}^{n_0}\mathcal
 W(D_i^{(1)},T_i^{(1)}; D_j^{(0)},T_j^{(0)})
 (C_i^{(1)}\wedge C_j^{(0)})}
 {\sum_{i=1}^{n_1}\sum_{j=1}^{n_0}\mathcal W(D_j^{(0)},T_j^{(0)};
 D_i^{(1)},T_i^{(1)})
 (C_i^{(1)}\wedge C_j^{(0)})},
-\end{equation}\]</span> where the <span class="math inline">\((D_i^{(a)}, T_i^{(a)}, C_i^{(a)})\)</span> <span class="math inline">\((i=1,\ldots, n_a)\)</span> are a random <span class="math inline">\(n_a\)</span>-sample of <span class="math inline">\((D^{(a)}, T^{(a)}, C^{(a)})\)</span> <span class="math inline">\((a=1, 0)\)</span> (the right hand side of (1) is
-indeed computable with censored data). A two-sided level-<span class="math inline">\(\alpha\)</span> win test of group difference
-rejects the null if <span class="math inline">\(n^{1/2}|\log
-S_n|/\widehat\sigma_n&gt;z_{1-\alpha/2}\)</span>, where <span class="math inline">\(n=n_1+n_0\)</span>, <span class="math inline">\(\widehat\sigma_n^2\)</span> is a consistent
-variance estimator, and <span class="math inline">\(z_{1-\alpha/2}\)</span> is the <span class="math inline">\((1-\alpha/2)\)</span>th quantile of the standard
+\end{equation}</span> where the <span class="math inline">(D_i^{(a)},
+T_i^{(a)}, C_i^{(a)})</span> <span class="math inline">(i=1,\ldots,
+n_a)</span> are a random <span class="math inline">n_a</span>-sample of
+<span class="math inline">(D^{(a)}, T^{(a)}, C^{(a)})</span> <span class="math inline">(a=1, 0)</span> (the right hand side of (1) is
+indeed computable with censored data). A two-sided level-<span class="math inline">\alpha</span> win test of group difference rejects
+the null if <span class="math inline">n^{1/2}|\log
+S_n|/\widehat\sigma_n&gt;z_{1-\alpha/2}</span>, where <span class="math inline">n=n_1+n_0</span>, <span class="math inline">\widehat\sigma_n^2</span> is a consistent variance
+estimator, and <span class="math inline">z_{1-\alpha/2}</span> is the
+<span class="math inline">(1-\alpha/2)</span>th quantile of the standard
 normal distribution. Mao (2019) showed that this test is powerful in
 large samples if the treatment stochastically delays death and the
 nonfatal event jointly.</p>
@@ -111,34 +117,38 @@ nonfatal event jointly.</p>
 <h3 id="methods-for-sample-size-calculation">Methods for sample size calculation<a class="anchor" aria-label="anchor" href="#methods-for-sample-size-calculation"></a>
 </h3>
 <p>To simplify sample size calculation, we posit a Gumbel–Hougaard
-copula model with marginal proportional hazards structure for <span class="math inline">\(D^{(a)}\)</span> and <span class="math inline">\(T^{(a)}\)</span>: <span class="math display">\[\begin{equation}\tag{2}
+copula model with marginal proportional hazards structure for <span class="math inline">D^{(a)}</span> and <span class="math inline">T^{(a)}</span>: <span class="math display">\begin{equation}\tag{2}
 {P}(D^{(a)}&gt;s, T^{(a)}&gt;t)
 =\exp\left(-\left[\left\{\exp(a\xi_1)\lambda_Ds\right\}^\kappa+
 \left\{\exp(a\xi_2)\lambda_Ht\right\}^\kappa\right]^{1/\kappa}\right),
-\end{equation}\]</span> where <span class="math inline">\(\lambda_D\)</span> and <span class="math inline">\(\lambda_H\)</span> are the baseline hazards for
-death and the nonfatal event, respectively, and <span class="math inline">\(\kappa\geq 1\)</span> controls their correlation
-(with Kendall’s concordance <span class="math inline">\(1-\kappa^{-1}\)</span>). The parameters <span class="math inline">\(\boldsymbol\xi:=(\xi_1,\xi_2)^{\rm T}\)</span> are
-the component-wise <em>log</em>-hazard ratios comparing the treatment to
+\end{equation}</span> where <span class="math inline">\lambda_D</span>
+and <span class="math inline">\lambda_H</span> are the baseline hazards
+for death and the nonfatal event, respectively, and <span class="math inline">\kappa\geq 1</span> controls their correlation (with
+Kendall’s concordance <span class="math inline">1-\kappa^{-1}</span>).
+The parameters <span class="math inline">\boldsymbol\xi:=(\xi_1,\xi_2)^{\rm T}</span> are the
+component-wise <em>log</em>-hazard ratios comparing the treatment to
 control, and will be used an the effect size in sample size calculation.
 Further assume that patients are recruited to the trial uniformly in an
-initial period <span class="math inline">\([0, \tau_b]\)</span> and
-followed up until time <span class="math inline">\(\tau\)</span> <span class="math inline">\((\tau\geq \tau_b)\)</span>, during which they
-randomly drop out with an exponential hazard rate of <span class="math inline">\(\lambda_L\)</span>. This leads to <span class="math inline">\(C^{(a)}\sim\mbox{Unif}[\tau-\tau_b,\tau]\wedge\mbox{Expn}(\lambda_L)\)</span>.
-The outcome parameters <span class="math inline">\(\lambda_D,
-\lambda_H\)</span>, and <span class="math inline">\(\kappa\)</span> may
-be estimated from pilot study data if available (see Section 3.2 of Mao
-et al. (2021)), whereas the design parameters <span class="math inline">\(\tau_b, \tau,\)</span> and perhaps <span class="math inline">\(\lambda_L\)</span> are best elicited from
+initial period <span class="math inline">[0, \tau_b]</span> and followed
+up until time <span class="math inline">\tau</span> <span class="math inline">(\tau\geq \tau_b)</span>, during which they randomly
+drop out with an exponential hazard rate of <span class="math inline">\lambda_L</span>. This leads to <span class="math inline">C^{(a)}\sim\mbox{Unif}[\tau-\tau_b,\tau]\wedge\mbox{Expn}(\lambda_L)</span>.
+The outcome parameters <span class="math inline">\lambda_D,
+\lambda_H</span>, and <span class="math inline">\kappa</span> may be
+estimated from pilot study data if available (see Section 3.2 of Mao et
+al. (2021)), whereas the design parameters <span class="math inline">\tau_b, \tau,</span> and perhaps <span class="math inline">\lambda_L</span> are best elicited from
 investigators of the new trial.</p>
-<p>The basic sample size formula is <span class="math display">\[\begin{equation}\tag{3}
+<p>The basic sample size formula is <span class="math display">\begin{equation}\tag{3}
 n=\frac{\zeta_0^2(z_{1-\beta}+z_{1-\alpha/2})^2}{q(1-q)(\boldsymbol\delta_0^{\rm
 T}\boldsymbol\xi)^2},
-\end{equation}\]</span> where <span class="math inline">\(q=n_1/n\)</span>, <span class="math inline">\(1-\beta\)</span> is the target power, <span class="math inline">\(\zeta_0\)</span> is a noise parameter similar to
-the standard deviation in the <span class="math inline">\(t\)</span>-test, and <span class="math inline">\(\boldsymbol\delta_0\)</span> is a bivariate vector
-containing the derivatives of the true win ratio with respect to <span class="math inline">\(\xi_1\)</span> and <span class="math inline">\(\xi_2\)</span>. Under model (2) for the outcomes
-and the specified follow-up design, we can calculate <span class="math inline">\(\zeta_0^2\)</span> and <span class="math inline">\(\boldsymbol\delta_0\)</span> as functions of <span class="math inline">\(\lambda_D, \lambda_H, \kappa, \tau_b,
-\tau\)</span>, and <span class="math inline">\(\lambda_L\)</span> by
-numerical means. Note in particular that they do <em>not</em> depend on
-the effect size <span class="math inline">\(\boldsymbol\xi\)</span>.</p>
+\end{equation}</span> where <span class="math inline">q=n_1/n</span>,
+<span class="math inline">1-\beta</span> is the target power, <span class="math inline">\zeta_0</span> is a noise parameter similar to the
+standard deviation in the <span class="math inline">t</span>-test, and
+<span class="math inline">\boldsymbol\delta_0</span> is a bivariate
+vector containing the derivatives of the true win ratio with respect to
+<span class="math inline">\xi_1</span> and <span class="math inline">\xi_2</span>. Under model (2) for the outcomes and
+the specified follow-up design, we can calculate <span class="math inline">\zeta_0^2</span> and <span class="math inline">\boldsymbol\delta_0</span> as functions of <span class="math inline">\lambda_D, \lambda_H, \kappa, \tau_b, \tau</span>,
+and <span class="math inline">\lambda_L</span> by numerical means. Note
+in particular that they do <em>not</em> depend on the effect size <span class="math inline">\boldsymbol\xi</span>.</p>
 </div>
 </div>
 <div class="section level2">
@@ -146,34 +156,35 @@ the effect size <span class="math inline">\(\boldsymbol\xi\)</span>.</p>
 </h2>
 <p>The function that implements formula (3) is <code><a href="../reference/WRSS.html">WRSS()</a></code>. We
 need to supply at least two arguments: <code>xi</code> for the bivariate
-effect size <span class="math inline">\(\boldsymbol\xi\)</span>
+effect size <span class="math inline">\boldsymbol\xi</span>
 (<em>log</em>-hazard ratios) and a list <code>bparam</code> containing
-<code>zeta2</code> for <span class="math inline">\(\zeta_0^2\)</span>
-and <code>delta</code> for <span class="math inline">\(\boldsymbol\delta_0\)</span>. That is,</p>
+<code>zeta2</code> for <span class="math inline">\zeta_0^2</span> and
+<code>delta</code> for <span class="math inline">\boldsymbol\delta_0</span>. That is,</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">obj</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/WRSS.html">WRSS</a></span><span class="op">(</span><span class="va">xi</span>,<span class="va">bparam</span><span class="op">)</span></span></code></pre></div>
-<p>The calculated <span class="math inline">\(n\)</span> can be
-extracted from <code>obj$n</code>. The default configurations for <span class="math inline">\(q\)</span>, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(1-\beta\)</span> are 0.5, 0.05, and 0.8 but can
-nonetheless be overridden through optional arguments <code>q</code>,
+<p>The calculated <span class="math inline">n</span> can be extracted
+from <code>obj$n</code>. The default configurations for <span class="math inline">q</span>, <span class="math inline">\alpha</span>
+and <span class="math inline">1-\beta</span> are 0.5, 0.05, and 0.8 but
+can nonetheless be overridden through optional arguments <code>q</code>,
 <code>alpha</code>, and <code>power</code>, respectively. You can also
 change the default two-sided test to one-sided by specifying
 <code>side=1</code>.</p>
 <p>The function <code><a href="../reference/WRSS.html">WRSS()</a></code> itself is almost unremarkable given
 the simplicity of the underlying formula. What takes effort is the
-computation of <span class="math inline">\(\zeta_0^2\)</span> and <span class="math inline">\(\boldsymbol\delta_0\)</span> needed for
-<code>bparam</code>. If you have the parameters <span class="math inline">\(\lambda_D, \lambda_H, \kappa, \tau_b,
-\tau\)</span>, and <span class="math inline">\(\lambda_L\)</span> ready,
-you can do so by using the <code><a href="../reference/base.html">base()</a></code> function:</p>
+computation of <span class="math inline">\zeta_0^2</span> and <span class="math inline">\boldsymbol\delta_0</span> needed for
+<code>bparam</code>. If you have the parameters <span class="math inline">\lambda_D, \lambda_H, \kappa, \tau_b, \tau</span>,
+and <span class="math inline">\lambda_L</span> ready, you can do so by
+using the <code><a href="../reference/base.html">base()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bparam</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/base.html">base</a></span><span class="op">(</span><span class="va">lambda_D</span>,<span class="va">lambda_H</span>,<span class="va">kappa</span>,<span class="va">tau_b</span>,<span class="va">tau</span>,<span class="va">lambda_L</span><span class="op">)</span></span></code></pre></div>
 <p>where the arguments follow the order of the said parameters. The
 returned object <code>bparam</code> can be directly used as argument for
 <code><a href="../reference/WRSS.html">WRSS()</a></code> (it is precisely a list containing
-<code>zeta2</code> and <code>delta</code> for the computed <span class="math inline">\(\zeta_0^2\)</span> and <span class="math inline">\(\boldsymbol\delta_0\)</span>, respectively). Due
-to the numerical complexity, <code><a href="../reference/base.html">base()</a></code> will typically require
+<code>zeta2</code> and <code>delta</code> for the computed <span class="math inline">\zeta_0^2</span> and <span class="math inline">\boldsymbol\delta_0</span>, respectively). Due to
+the numerical complexity, <code><a href="../reference/base.html">base()</a></code> will typically require
 some wait time.</p>
-<p>Finally, if you have a pilot dataset to estimate <span class="math inline">\(\lambda_D\)</span>, <span class="math inline">\(\lambda_H\)</span>, and <span class="math inline">\(\kappa\)</span> for the baseline outcome
-distribution, you can use the <code><a href="../reference/gumbel.est.html">gumbel.est()</a></code> function:</p>
+<p>Finally, if you have a pilot dataset to estimate <span class="math inline">\lambda_D</span>, <span class="math inline">\lambda_H</span>, and <span class="math inline">\kappa</span> for the baseline outcome distribution,
+you can use the <code><a href="../reference/gumbel.est.html">gumbel.est()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gum</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/gumbel.est.html">gumbel.est</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">time</span>, <span class="va">status</span><span class="op">)</span></span></code></pre></div>
 <p>where <code>id</code> is a vector containing the unique patient
@@ -182,8 +193,8 @@ identifiers, <code>time</code> a vector of event times, and
 for nonfatal event, <code>=1</code> for death, and <code>=0</code> for
 censoring. The returned object is a list containing real numbers
 <code>lambda_D</code>, <code>lambda_H</code>, and <code>kappa</code> for
-<span class="math inline">\(\lambda_D\)</span>, <span class="math inline">\(\lambda_H\)</span>, and <span class="math inline">\(\kappa\)</span> respectively. These can then be
-fed into <code><a href="../reference/base.html">base()</a></code> to get <code>bparam</code>.</p>
+<span class="math inline">\lambda_D</span>, <span class="math inline">\lambda_H</span>, and <span class="math inline">\kappa</span> respectively. These can then be fed
+into <code><a href="../reference/base.html">base()</a></code> to get <code>bparam</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="a-real-example">A REAL EXAMPLE<a class="anchor" aria-label="anchor" href="#a-real-example"></a>
@@ -227,7 +238,7 @@ use.</p>
 <h3 id="use-pilot-data-to-estimate-baseline-parameters">Use pilot data to estimate baseline parameters<a class="anchor" aria-label="anchor" href="#use-pilot-data-to-estimate-baseline-parameters"></a>
 </h3>
 <p>Now, we can use the <code><a href="../reference/gumbel.est.html">gumbel.est()</a></code> functions to estimate
-<span class="math inline">\(\lambda_D\)</span>, <span class="math inline">\(\lambda_H\)</span>, and <span class="math inline">\(\kappa\)</span>.</p>
+<span class="math inline">\lambda_D</span>, <span class="math inline">\lambda_H</span>, and <span class="math inline">\kappa</span>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">id</span><span class="op">&lt;-</span><span class="va">pilot</span><span class="op">$</span><span class="va">patid</span></span>
 <span><span class="co">## convert time from month to year</span></span>
@@ -248,12 +259,12 @@ use.</p>
 <span><span class="va">lambda_D</span><span class="op">&lt;-</span><span class="va">gum</span><span class="op">$</span><span class="va">lambda_D</span></span>
 <span><span class="va">lambda_H</span><span class="op">&lt;-</span><span class="va">gum</span><span class="op">$</span><span class="va">lambda_H</span></span>
 <span><span class="va">kappa</span><span class="op">&lt;-</span><span class="va">gum</span><span class="op">$</span><span class="va">kappa</span></span></code></pre></div>
-<p>This gives us <span class="math inline">\(\widehat\lambda_D=0.11\)</span>, <span class="math inline">\(\widehat\lambda_H=0.68\)</span>, and <span class="math inline">\(\widehat\kappa=1.93\)</span>. Suppose that we are
-to launch a new trial that lasts <span class="math inline">\(\tau=4\)</span> years, with an initial accrual
-period of <span class="math inline">\(\tau_b=3\)</span> years. Further
-suppose that the loss to follow-up rate is <span class="math inline">\(\lambda_L=0.05\)</span> (about half of the
-baseline death rate). Combining this set-up with the estimated outcome
-parameters, we can calculate <span class="math inline">\(\zeta_0^2\)</span> and <span class="math inline">\(\boldsymbol\delta_0\)</span> using the
+<p>This gives us <span class="math inline">\widehat\lambda_D=0.11</span>, <span class="math inline">\widehat\lambda_H=0.68</span>, and <span class="math inline">\widehat\kappa=1.93</span>. Suppose that we are to
+launch a new trial that lasts <span class="math inline">\tau=4</span>
+years, with an initial accrual period of <span class="math inline">\tau_b=3</span> years. Further suppose that the loss
+to follow-up rate is <span class="math inline">\lambda_L=0.05</span>
+(about half of the baseline death rate). Combining this set-up with the
+estimated outcome parameters, we can calculate <span class="math inline">\zeta_0^2</span> and <span class="math inline">\boldsymbol\delta_0</span> using the
 <code><a href="../reference/base.html">base()</a></code> function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## max follow-up 4 years</span></span>
@@ -280,8 +291,8 @@ parameters, we can calculate <span class="math inline">\(\zeta_0^2\)</span> and 
 </h3>
 <p>Now we can use the computed <code>bparam</code> to calculate sample
 size under different combinations of component-wise hazard ratios. We
-consider target power <span class="math inline">\(1-\beta=80%\)</span>
-and <span class="math inline">\(90%\)</span>.</p>
+consider target power <span class="math inline">1-\beta=80%</span> and
+<span class="math inline">90%</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## effect size specification</span></span>
 <span><span class="va">thetaD</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.6</span>,<span class="fl">0.95</span>,by<span class="op">=</span><span class="fl">0.05</span><span class="op">)</span> <span class="co">## hazard ratio for death</span></span>
@@ -337,14 +348,14 @@ and <span class="math inline">\(90%\)</span>.</p>
 <span><span class="co">#&gt; 0.85 349.1467 477.2435 670.9201  980.6437 1515.1269 2543.923 4891.732 12161.272</span></span>
 <span><span class="co">#&gt; 0.9  368.7827 508.8465 724.0820 1075.7503 1701.0034 2959.370 6052.798 17205.486</span></span>
 <span><span class="co">#&gt; 0.95 388.9220 541.7208 780.4053 1179.0446 1910.1985 3453.637 7578.090 25538.227</span></span></code></pre></div>
-<p>Powered at <span class="math inline">\(80\%\)</span>, the sample size
-ranges from 193 at <span class="math inline">\(\exp(\boldsymbol\xi)=(0.6, 0.6)^{\rm T}\)</span>
-to 19,077 at <span class="math inline">\(\exp(\boldsymbol\xi)=(0.95,
-0.95)^{\rm T}\)</span>; powered at <span class="math inline">\(90\%\)</span>, the sample size ranges from 258 at
-<span class="math inline">\(\exp(\boldsymbol\xi)=(0.6, 0.6)^{\rm
-T}\)</span> to 25,539 at <span class="math inline">\(\exp(\boldsymbol\xi)=(0.95, 0.95)^{\rm
-T}\)</span>. We can even use a 3D plot to display the calculated sample
-size as a function of the hazard ratios <span class="math inline">\(\exp(\xi_1)\)</span> and <span class="math inline">\(\exp(\xi_2)\)</span>.</p>
+<p>Powered at <span class="math inline">80\%</span>, the sample size
+ranges from 193 at <span class="math inline">\exp(\boldsymbol\xi)=(0.6,
+0.6)^{\rm T}</span> to 19,077 at <span class="math inline">\exp(\boldsymbol\xi)=(0.95, 0.95)^{\rm T}</span>;
+powered at <span class="math inline">90\%</span>, the sample size ranges
+from 258 at <span class="math inline">\exp(\boldsymbol\xi)=(0.6,
+0.6)^{\rm T}</span> to 25,539 at <span class="math inline">\exp(\boldsymbol\xi)=(0.95, 0.95)^{\rm T}</span>. We
+can even use a 3D plot to display the calculated sample size as a
+function of the hazard ratios <span class="math inline">\exp(\xi_1)</span> and <span class="math inline">\exp(\xi_2)</span>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">oldpar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"mfrow"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
