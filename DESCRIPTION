@@ -1,7 +1,7 @@
 Package: WR
 Type: Package
 Title: Win Ratio Analysis of Composite Time-to-Event Outcomes
-Version: 1.0
+Version: 1.0.1
 Author: Lu Mao and Tuo Wang
 Maintainer: Lu Mao <lmao@biostat.wisc.edu>
 URL: https://sites.google.com/view/lmaowisc/, https://lmaowisc.github.io/WR/
