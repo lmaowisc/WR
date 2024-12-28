@@ -1,4 +1,6 @@
 url: https://lmaowisc.github.io/WR/
 template:
   bootstrap: 5
+  params:
+    logo: logo.png
 
