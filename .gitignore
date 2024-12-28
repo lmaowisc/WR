@@ -5,5 +5,7 @@ inst/doc
 .httr-oauth
 .DS_Store
 .quarto
-*.R
 docs
+simus_resids.R
+test.R
+test_v11_1.R

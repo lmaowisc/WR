@@ -8,3 +8,4 @@
 ^LICENSE\.md$
 ^README.Rmd
 ^test_v11_1.R$
+^simus_resids.R
