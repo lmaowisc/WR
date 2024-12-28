@@ -5,5 +5,5 @@ inst/doc
 .httr-oauth
 .DS_Store
 .quarto
-test.R
+*.R
 docs

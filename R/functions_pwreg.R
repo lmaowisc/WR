@@ -558,9 +558,10 @@ score.proc <- function(obj,t=NULL){
 #' pwreg.obj1 <- pwreg(time=time,status=status,Z=Z1,ID=ID,strata=sex)
 #' print(pwreg.obj1)
 #' }
- pwreg <- function(ID,time,status,Z,rho=0,strata=NULL,fixedL=TRUE,eps=1e-4,maxiter=50){
+ pwreg <- function(ID,time,status,Z,rho=0,strata=NULL,fixedL=TRUE,eps=1e-4, maxiter=50){
 
   ID.save <- ID
+
 
   if(is.character(ID) | is.factor(ID)){
     ID <- as.numeric(factor(ID,levels = unique(ID)))
@@ -656,106 +657,4 @@ score.proc <- function(obj,t=NULL){
   class(obj) <- "pwreg"
   return(obj)
 }
-
-# A test version of pwreg
- pwreg1 <- function(ID,time,status,Z,rho=0,strata=NULL,fixedL=TRUE,eps=1e-4,maxiter=50){
-
-   ID.save <- ID
-
-   if(is.character(ID) | is.factor(ID)){
-     ID <- as.numeric(factor(ID,levels = unique(ID)))
-   }
-
-   if(is.null(strata)){
-     data <- cbind(ID,time,status,Z)
-     obj <- extract.times(data)
-     datap <- obj$datap
-     n <- nrow(datap)
-     tau <- obj$tau
-     p <- ncol(datap)-4
-     outcome <- delta.data(datap,tau)
-     q <- ncol(outcome)
-     dataf <- outcome[,-q]
-     comp <- outcome[,q]
-     beta <- rep(0,p)
-     H.obj <- surv.Hfun(rho,data,dataf,datap,tau)
-     H <- H.obj$H
-     t <- H.obj$t
-     survZ <- H.obj$survZ
-     obj <- NRfunPW(beta,H,t,rho,dataf,tau,survZ=survZ,eps=eps,maxiter=maxiter)
-
-     beta <- obj$beta
-     conv <- obj$conv
-     iter <- obj$iter
-
-     if(conv){
-       IF.obj <- IF.fun(beta,H,t,rho,dataf,tau,survZ)
-       IFbeta <- IF.obj$IFbeta
-       S <- IF.obj$S
-       Vscore <- IF.obj$Vscore
-     }else{
-       message("Newton-Raphson did not converge! \n You may try increasing maximum
-      number of iterations by specifying 'maxiter='.")
-     }
-     obj <- list(beta=beta,Var=S/n,IFbeta=IFbeta,conv=conv,V=Vscore/n,n=n,
-                 t=t,comp=comp,dataf=dataf,H=H,tau=tau,strata=strata,
-                 varnames=colnames(data)[4:(3+p)],i=iter,call=match.call())
-   }else{
-     if(!is.factor(strata)){
-       strata <- factor(strata)
-     }
-
-     data <- cbind(ID,time,status,Z)
-     sv <- levels(strata)
-     ns <- length(sv)
-     p <- ncol(data) - 3
-
-     tmp <- extract.times(cbind(data,strata))
-     h <- as.numeric(table(tmp$datap[,'strata']))/nrow(tmp$datap)
-     rm(tmp)
-
-     datap <- list()
-     dataf <- list()
-     tau <- list()
-     H <- list()
-     t <- list()
-     for(i in c(1:ns)){
-       obj <- extract.times(data[strata==sv[i],])
-       datap[[i]] <- obj$datap
-       tau[[i]] <- obj$tau
-       outcome <- delta.data(obj$datap, obj$tau)
-       q <- ncol(outcome)
-       dataf[[i]] <- outcome[,-q]
-       H.obj <- Hfun(data,dataf=dataf[[i]],datap=datap[[i]],tau=tau[[i]],h=h[i])
-       H[[i]] <- H.obj$H
-       t[[i]] <- H.obj$t
-     }
-
-     beta <- rep(0,p)
-     obj <- NRfunPWS(beta, H, t, dataf, tau, eps=eps, maxiter=maxiter)
-
-     beta <- obj$beta
-     conv <- obj$conv
-     iter <- obj$iter
-
-     if(conv){
-       IF.obj <- s.IF.fun(beta=obj$beta,H,t,dataf,tau,fixedL)
-       Var <- IF.obj$Var
-       V <- IF.obj$V
-     }else{
-       message("Newton-Raphson did not converge! \n You may try increasing maximum
-      number of iterations by specifying 'maxiter='.")
-     }
-     obj <- list(
-       beta=beta, conv=conv, Var=Var, V=V, fixedL=fixedL, h=h, strata=strata,
-       t = t, dataf=dataf, H=H, tau=tau, varnames = colnames(data)[4:(3+p)],
-       i=iter, call=match.call()
-     )
-   }
-
-   class(obj) <- "pwreg"
-   return(obj)
- }
-
-
 
