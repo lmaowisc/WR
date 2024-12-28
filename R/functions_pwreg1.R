@@ -390,10 +390,10 @@ pwreg1 <- function(id, time, status, Z, wfun = NULL, Y = NULL, strata = NULL, fi
     # Take projected, individualized quantities: delta, R, Lambda,  M, score residuals
     resids_n <- score_sum
 
-    obj <- list(beta = beta, Var = Var, conv = conv, iter = iter, # basic model fit
+    obj <- list(beta = beta, Var = Var, conv = conv, iter = iter, n = n, N = N, # basic model fit
                 resids_n = resids_n, Zn = Zn,  # individualized quantities (w. id column)
                 A = A, kappa_matrix = kappa_matrix, psi_matrix = psi_matrix, # influence-related quantities
-                pairwise_tibble = pairwise_tibble, # pairwise data for possible re-calculation of win-loss (by t)
+                pairwise_tibble = pairwise_tibble,  pw_win = pw_win,# pairwise data for possible re-calculation of win-loss (by t)
                 df = df, # original data
                 call = match.call(), wfun = wfun, fixedL = fixedL # call and control parameters
                 )
@@ -456,12 +456,17 @@ residuals.pwreg1 <- function(x, ...) {
 
   }
 
+
+
+
+
 #' Print model information for a proportional win-fractions regression
 #' @description Print model information for a proportional win-fractions regression.
 #' @param x an object of class \code{pwreg1}.
 #' @param ... further arguments passed to or from other methods.
 #' @return Print the results of \code{pwreg1} object
 #' @seealso \code{\link{pwreg1}}
+#' @import dplyr
 #' @export
 #' @keywords pwreg1
 #' @examples
@@ -473,55 +478,31 @@ print.pwreg1 <- function(x,...){
   cat("\n")
   strata <- x$strata
   beta <- x$beta
-  var <- x$Var
   # t <- x$t
   n <- x$n
   N <- x$N
-  comp <- x$comp
-  varnames <- x$varnames
-  se <- sqrt(diag(var))
-  pv <- 2*(1-pnorm(abs(beta/se)))
+  win_comp_tab <- x$pw_win |>
+    count(component) |>
+    mutate(prop = n / N)
+
 
   if(is.null(strata)){
-    cat("Proportional win-fractions regression analysis:\n\n")
+    cat("Proportional win-fractions regression analysis:\n")
     tn <- n*(n-1)/2
-    cat("Total number of pairs:", tn,"\n")
-    cat("Wins-losses on death: ",paste(sum(comp==1)," (",round(100*sum(comp==1)/tn,1),"%)",sep=""),"\n")
-    cat("Wins-losses on non-fatal event: ",paste(sum(comp==2)," (",round(100*sum(comp==2)/tn,1),"%)",sep=""),"\n")
-    cat("Indeterminate pairs",paste(sum(comp==0)," (",round(100*sum(comp==0)/tn,1),"%)",sep=""),"\n\n")
-  }else{
+    cat("Total number of pairs:", N,"\n")
+    print(win_comp_tab)
+    }else{
     cat("Stratified proportional win-fractions regression analysis:\n\n")
     cat("Total number of strata:", length(levels(strata)), "\n")
-  }
+    }
 
-  cat("Newton-Raphson algorithm converged in", x$i,"iterations.\n\n")
-  Stat <- t(beta)%*%solve(var)%*%beta
-  pval <- 1-pchisq(Stat,length(beta))
-  cat("Overall test: chisq test with",length(beta),"degrees of freedom;","\n",
-      "Wald statistic", round(Stat,1),"with p-value", pval,"\n\n")
+  print(beta)
 
-  table <- cbind(
-    Estimate = beta,
-    StdErr = se,
-    z.value = beta/se,
-    p.value = pv)
-
-  colnames(table) <- c("Estimate","se","z.value","p.value")
-  rownames(table) <- varnames
-
-  cat("Estimates for Regression parameters:\n")
-  printCoefmat(table, P.values=TRUE, has.Pvalue=TRUE)
-  cat("\n")
-  cat("\n")
-
-  za <- qnorm(0.975)
-  MR <- cbind(exp(beta),exp(beta-za*se),exp(beta+za*se))
-  colnames(MR) <- c("Win Ratio","95% lower CL","95% higher CL")
-  rownames(MR) <- varnames
-  cat("Point and interval estimates for the win ratios:\n")
-  print(MR)
-  cat("\n")
 }
+
+
+
+
 
 
 # Test another version of pw score ----------------------------------
