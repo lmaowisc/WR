@@ -18,11 +18,17 @@ pwreg1(
 )
 }
 \arguments{
+\item{id}{A vector of subject identifiers.}
+
 \item{time}{A vector of event times.}
 
 \item{status}{A vector of event indicators.}
 
-\item{Z}{A matrix of covariates.}
+\item{Z}{A matrix or data frame (tibble) of covariates.}
+
+\item{wfun}{A function for the win function (Default is standard Pocock's win function).}
+
+\item{Y}{An optional matrix or data frame (tibble) of continuous response variables.}
 
 \item{strata}{A vector of strata indicators.}
 
@@ -31,10 +37,6 @@ pwreg1(
 \item{eps}{A numeric value for the convergence criterion.}
 
 \item{maxiter}{A numeric value for the maximum number of iterations.}
-
-\item{ID}{A vector of subject identifiers.}
-
-\item{rho}{A numeric value for the frailty parameter.}
 }
 \description{
 This function is a test version of the \code{pwreg} function.

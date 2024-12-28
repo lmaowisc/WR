@@ -1,3 +1,4 @@
+#' @export
 extract.times <- function(df){
   # Given a wide-format data, transform it to a long-format longitudinal data
   p <- ncol(df)-3
