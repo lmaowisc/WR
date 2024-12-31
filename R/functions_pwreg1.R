@@ -385,8 +385,23 @@ pwreg1 <- function(id, time, status, Z, wfun = NULL, Y = NULL, strata = NULL, fi
     A_inv <- solve(A)
     # Influence function of beta
     psi_matrix <- - 2 * A_inv %*% t(kappa_matrix) # p x n
-    Var <- psi_matrix %*% t(psi_matrix) / n^2
+    Var <- psi_matrix %*% t(psi_matrix) / (n * (n - p - 1))
 
+    ## Output id-based influence function of beta
+    psi_df_wl <- score_sum |> select(id) |> bind_cols(as_tibble(t(psi_matrix)))
+
+    psi_df <- tibble(
+      id = uid
+      ) |>
+      left_join(
+        psi_df_wl,
+        by = c("id" = "id")
+      )|>
+      mutate(
+        across(-id, ~ replace_na(., 0))
+      )
+
+    psi_matrix <- psi_df |> select(-id) |> as.matrix() |> t()
     # Take projected, individualized quantities: delta, R, Lambda,  M, score residuals
     resids_n <- score_sum
 
@@ -457,6 +472,318 @@ residuals.pwreg1 <- function(x, ...) {
   }
 
 
+#' @export
+scores.pwreg1 <- function(x, ...) {
+
+  call <- x$call
+  # Contains delta, R, Lambda, M (win residuals)
+  resids_n <- x$resids_n
+  # Contains Zn
+  Zn <- x$Zn
+  p <- ncol(Zn) - 1
+  n <- nrow(Zn)
+  resids_n <- x$resids_n |>
+    right_join(Zn |> select(id), by = "id") |>
+    mutate(
+      across(everything(), ~ replace_na(., 0))
+    )
+  # Compute hat matrix and Cook's distance ----------------------------------
+  # Compute hat matrix
+  Zbar <- resids_n |> select(id, Lambda) |>
+    left_join(Zn, by = c("id" = "id")) |>
+    summarize(
+      across(3 : (2+p), \(x) weighted.mean(x, Lambda))
+    )
+
+
+  # Compute Z - Zbar
+  Zn_cen <- Zn |> select(-id) |> as.matrix() - matrix(rep(Zbar |> as.matrix(), n), nrow = n, byrow = TRUE)
+  # Compute hat matrix
+  H <- Zn_cen %*% solve(t(Zn_cen) %*% Zn_cen) %*% t(Zn_cen)
+  hii <- diag(H)
+
+  # Compute Cook's distance
+  M <- resids_n$M
+  sigma2 <- sum(M^2) / (n - p - 1)
+  cook_d <- {M^2 / (sigma2 * (p + 1))} * {hii / (1 - hii)^2}
+  # max(cook_d)
+
+  df_resids <- resids_n |>
+    mutate(
+      r = M / R
+    ) |>
+    bind_cols(
+      hii = hii,
+      cook_d = cook_d
+    ) |>
+    relocate(
+      id, delta, R, Lambda, M, r, hii, cook_d
+    )
+
+  return(df_resids)
+
+}
+
+#' @export
+predict.pwreg1 <- function(x, z1, z2, alpha = 0.05, contrast = FALSE, ...) {
+
+  # z1 <- non_ischemic[1, 4:ncol(non_ischemic)]
+  # z2 <- z1
+  # z1$trt_ab = 1
+
+  # Check if x$Y is not NULL
+  if(!is.null(x$Y)){
+    stop("Not applicable if there is continuous response.")
+  }
+  call <- x$call
+  n <- x$n
+  # Extract PW model data -------------------------------------------------------
+  df <- x$df
+  df_n <- df |>
+    group_by(id) |>
+    arrange(
+      time
+    ) |>
+    slice(1) |>
+    ungroup()
+  # Compute beta
+  beta <- x$beta
+  expz1beta <- exp(sum(z1 * beta))
+  expz2beta  <- exp(sum(z2 * beta))
+  mu <- expz1beta  / (expz1beta  + expz2beta)
+  # Influence function of beta
+  psi_matrix <- x$psi_matrix
+
+  # Fit Cox model to first event --------------------------------------------
+  # Extract first event data
+  # Fit Cox model
+  cox_fit <- coxph(Surv(time, status > 0) ~ ., data = df_n |>
+                     select(-id))
+  # Get model matrix
+  # Z <- model.matrix(cox_fit)
+  Zn <- df_n |> select(-c(time, status))
+  # Extract coefficients
+  gamma <- coef(cox_fit)
+  p <- length(gamma)
+  # Extract efficient information
+  v <- vcov(cox_fit)
+  # sqrt(diag(v))
+  invI <- v * n
+  # Extract baseline cumulative hazard
+  cox_base <- basehaz(cox_fit, centered = FALSE) |> as_tibble()
+  # ?basehaz
+  # Unique times
+  ts <- cox_base$time
+  m <- length(ts)
+  # Extract baseline hazard
+  Lambda <- cox_base$hazard
+  # Take increments
+  dLambda <- c(Lambda[1], diff(Lambda))
+
+  # Point estimates of win-loss probs ---------------------------------------
+  # Survival probabilities
+  expz1 <- exp(sum(gamma * z1))
+  expz2 <- exp(sum(gamma * z2))
+
+  Sz1 <- exp(- expz1 * Lambda)
+  Sz2 <- exp(- expz2 * Lambda)
+  # Comparability probabilities
+  comp_probs <- 1 - Sz1 * Sz2
+  # WL probs
+  win_prob <- comp_probs * mu
+  loss_prob <- comp_probs - win_prob
+  # Compute standard errors -------------------------------------------------
+  # Function to compute counting, at-risk, martingale process
+
+  counting_at_risk <- function(X, status){
+    # Counting process and increments
+    Nt <- (X <= ts) * status
+    dNt <- c(Nt[1], diff(Nt))
+    # At-risk process
+    Yt <- (X >= ts) + 0
+    return(list(dNt = dNt, Yt = Yt, ts = ts, dLambda = dLambda))
+  }
+
+  df_mart_stats <- df_n |>
+    select(
+      id,
+      X = time,
+      status
+    ) |>
+    mutate(
+      status =  (status > 0) + 0
+    ) |> bind_cols(
+      nu = exp(Zn |> select(-id) |> as.matrix() %*% gamma |> as.vector())
+    ) |>
+    mutate(
+      martingales = map2(X, status, counting_at_risk)
+    ) |>
+    unnest_wider(martingales) |>
+    unnest_longer(c(dNt, Yt, dLambda, ts)) |>
+    mutate(
+      dMt = dNt - Yt * nu * dLambda,
+    )
+  # Compue s0t and s1t
+  df_s0t <- df_mart_stats |>
+    group_by(ts) |>
+    summarize(
+      s0t = mean(Yt * nu),
+    )
+
+  df_s1t <-
+    df_mart_stats |>
+    select(id, ts, Yt, nu) |>
+    left_join(Zn, by = c("id" = "id")) |>
+    group_by(ts) |>
+    summarize(
+      across(-c(id, Yt, nu), \(x) mean(x * Yt * nu)) # weighted average by Y(t) * nu
+    )
+
+  # E-function of t
+  df_Et <- df_s0t |>
+    left_join(df_s1t, by = "ts") |>
+    mutate(
+      across(-c(ts, s0t), \(x) if_else(s0t > 0, x / s0t, 0))
+    )
+
+
+  df_all_stats <- df_mart_stats |>
+    select(id, ts, dLambda, dMt) |>
+    left_join(df_Et, by = "ts")
+
+
+  Et_dM_n <-  df_all_stats |>
+    group_by(id) |>
+    summarize(
+      across(-c(ts, dLambda, dMt, s0t), \(x)  - sum(x * dMt))
+    )
+
+  Z_dM_n <- df_mart_stats|>
+    select(id, ts, dMt) |>
+    left_join(Zn, by = "id") |>
+    group_by(id) |>
+    summarize(
+      across(-c(ts, dMt), \(x) sum(x * dMt))
+    )
+
+
+  cox_score_psi <- Z_dM_n |>
+    bind_rows(Et_dM_n) |>
+    group_by(id) |>
+    summarize(
+      across(everything(), sum)
+    )
+
+
+  cox_score_psi_mat <- cox_score_psi |>
+    select(-id) |>
+    as.matrix() %*% invI
+
+
+  # Calculate H function
+  # Joint with baseline hazards by ts
+  Et_mat <-  df_Et |> select(-s0t) |>
+    left_join(cox_base, by = c("ts" = "time"))
+  # Get Lambda and dLambda
+  Lambda <- Et_mat$hazard
+  dLambda <- c(Lambda[1], diff(Lambda))
+  Et_mat <- Et_mat |>
+    bind_cols(
+      dLambda = dLambda
+    )
+  # Extract Et
+  Et <- Et_mat |> select(-c(ts, dLambda, hazard)) |> as.matrix()
+  # Hz1
+  z1 <- as.numeric(z1)
+  H1mat <- Et_mat |>
+    select(ts, dLambda) |>
+    bind_cols(
+      matrix(rep(z1, m), byrow = TRUE, nrow = m) - Et
+    ) |>
+    arrange(ts) |>
+    mutate(
+      across(-c(ts, dLambda),  \(x) expz1 * cumsum(x * dLambda))
+    ) |>
+    select(-c(ts, dLambda)) |>
+    as.matrix()
+  # Hz2
+  z2 <- as.numeric(z2)
+  H2mat <- Et_mat |>
+    select(ts, dLambda) |>
+    bind_cols(
+      matrix(rep(z2, m), byrow = TRUE, nrow = m) - Et
+    ) |>
+    arrange(ts) |>
+    mutate(
+      across(-c(ts, dLambda),  \(x) expz2 * cumsum(x * dLambda))
+    ) |>
+    select(-c(ts, dLambda)) |>
+    as.matrix()
+
+  # Second part of Omega psi
+  omega_mat2 <- df_all_stats |>
+    select(id, ts, s0t, dMt) |>
+    group_by(id) |>
+    arrange(ts) |>
+    mutate(
+      s0t_inv = if_else(s0t > 0, 1 / s0t, 0),
+      omega_psi_p2 = (expz1 + expz2) * cumsum(s0t_inv * dMt)
+    ) |>
+    pivot_wider(
+      id_cols = ts,
+      names_from = id,
+      values_from = omega_psi_p2
+    ) |>
+    select(-ts) |>
+    as.matrix()
+
+
+  # Adding two parts to obtain omega psi
+  # m x n matrix
+  omega_psi_mat1 <- (H1mat + H2mat) %*% t(cox_score_psi_mat)
+  omega_psi_mat <- Sz1 * Sz2 * (omega_psi_mat1 + omega_mat2)
+
+  # rowMeans(omega_psi_mat)
+
+  # PW part of psu
+  # Compute psu
+  # Win part
+  win_if_beta <- (1 - mu) * win_prob %*% t(z1 - z2) %*% psi_matrix
+  # loss_if_beta <- - win_if_beta
+  win_if_mat <- mu * omega_psi_mat + win_if_beta
+  loss_if_mat <- (1 - mu) * omega_psi_mat - win_if_beta
+  # Pointwise variance
+  win_prob_se <- sqrt(rowMeans(win_if_mat^2) / (n - p - 1))
+  loss_prob_se <- sqrt(rowMeans(loss_if_mat^2) / (n - p - 1))
+
+
+# Estimate and make inference on contrasts --------------------------------
+if (contrast){
+  # Variance matrix for beta
+  Var <- x$Var
+  # log-WR
+  zd <- z1 - z2
+  log_wr <- sum(zd * beta)
+  log_wr_se <- sqrt(zd %*% Var %*% zd) |> as.numeric()
+
+
+
+
+
+
+}
+
+
+  # Return results
+  result <- tibble(
+    time = ts,
+    win_prob = win_prob,
+    win_prob_se = win_prob_se,
+    loss_prob = loss_prob,
+    loss_prob_se = loss_prob_se
+  )
+  return(result)
+}
 
 
 
