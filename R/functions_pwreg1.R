@@ -525,12 +525,13 @@ scores.pwreg1 <- function(x, ...) {
 }
 
 #' @export
+#' @import dplyr purrr
 predict.pwreg1 <- function(x, z1, z2, alpha = 0.05, contrast = FALSE, ...) {
 
   # z1 <- non_ischemic[1, 4:ncol(non_ischemic)]
   # z2 <- z1
   # z1$trt_ab = 1
-
+  # x <- obj
   # Check if x$Y is not NULL
   if(!is.null(x$Y)){
     stop("Not applicable if there is continuous response.")
@@ -755,7 +756,33 @@ predict.pwreg1 <- function(x, z1, z2, alpha = 0.05, contrast = FALSE, ...) {
   # Pointwise variance
   win_prob_se <- sqrt(rowMeans(win_if_mat^2) / (n - p - 1))
   loss_prob_se <- sqrt(rowMeans(loss_if_mat^2) / (n - p - 1))
+  # Confidence intervals
+  za <- qnorm(1 - alpha / 2)
+  # Logit transforms
+  logit_win_prob <- logit(win_prob)
+  logit_loss_prob <- logit(loss_prob)
+  # SE of logit
+  logit_win_prob_se <- dlogit(win_prob) * win_prob_se
+  logit_loss_prob_se <- dlogit(loss_prob) * loss_prob_se
+  # CI for win_prob and loss_prob
+  win_prob_high <- expit(logit_win_prob + za * logit_win_prob_se)
+  win_prob_low <- expit(logit_win_prob - za * logit_win_prob_se)
+  loss_prob_high <- expit(logit_loss_prob + za * logit_loss_prob_se)
+  loss_prob_low <- expit(logit_loss_prob - za * logit_loss_prob_se)
 
+
+
+  result <- tibble(
+    time = ts,
+    win = win_prob,
+    win_se = win_prob_se,
+    win_high = win_prob_high,
+    win_low = win_prob_low,
+    loss = loss_prob,
+    loss_se = loss_prob_se,
+    loss_high = loss_prob_high,
+    loss_low = loss_prob_low
+  )
 
 # Estimate and make inference on contrasts --------------------------------
 if (contrast){
@@ -765,25 +792,73 @@ if (contrast){
   zd <- z1 - z2
   log_wr <- sum(zd * beta)
   log_wr_se <- sqrt(zd %*% Var %*% zd) |> as.numeric()
+  # Win ratio
+  wr <- exp(log_wr)
+  wr_high <- exp(log_wr + za * log_wr_se)
+  wr_low <- exp(log_wr - za * log_wr_se)
+  # Covariance between win and loss
+  wl_probs_cov <- rowMeans(win_if_mat * loss_if_mat) / n # Not (n-p-1) to avoid overestimation
+  win_prob_var <- win_prob_se^2
+  loss_prob_var <- loss_prob_se^2
+  # Net benefit
+  nb <- win_prob - loss_prob
+  nb_se <- sqrt(win_prob_var + loss_prob_var - 2 * wl_probs_cov)
+  arctanh_nb <- atanh(nb)
+  arctanh_nb_se <- darctanh(nb) * nb_se
+  # CI for arctan_nb
+  arctanh_nb_high <- arctanh_nb + za * arctanh_nb_se
+  arctanh_nb_low <- arctanh_nb - za * arctanh_nb_se
+  # CI for nb
+  nb_high <- tanh(arctanh_nb_high)
+  nb_low <- tanh(arctanh_nb_low)
+  # nb_high <- nb + za * nb_se
+  # nb_low <- nb - za * nb_se
+  # Win odds
+  wo <- exp(2 * arctanh_nb)
+  wo_high <- exp(2 * arctanh_nb_high)
+  wo_low <- exp(2 * arctanh_nb_low)
 
-
-
-
-
+  result <- result |>
+    bind_cols(
+      wr = wr,
+      wr_low = wr_low,
+      wr_high = wr_high,
+      nb = nb,
+      nb_low = nb_low,
+      nb_high = nb_high,
+      wo = wo,
+      wo_low = wo_low,
+      wo_high = wo_high,
+      z_nb_wo = arctanh_nb / arctanh_nb_se
+    )
 
 }
-
 
   # Return results
-  result <- tibble(
-    time = ts,
-    win_prob = win_prob,
-    win_prob_se = win_prob_se,
-    loss_prob = loss_prob,
-    loss_prob_se = loss_prob_se
-  )
   return(result)
 }
+
+# Transformation functions ------------------------------------------------
+# These are suitable for delta methods
+
+darctanh <- function(x) {
+  ifelse(abs(x) >= 1, 0, 1 / (1 - x^2))
+}
+
+
+logit <- function(x) {
+
+  x <- ifelse(x == 1,
+              1 - 1e-12,
+              x)
+  x <- ifelse(x == 0,
+              1e-12,
+              x)
+  # return results
+  log(x / (1 - x))
+}
+dlogit <- function(x) ifelse(x == 0 | x == 1, 0, (x * (1 - x))^{-1})
+expit <- function(x) exp(x) / (1 + exp(x))
 
 
 
@@ -830,56 +905,3 @@ print.pwreg1 <- function(x,...){
 
 
 
-
-
-# Test another version of pw score ----------------------------------
-# Tested
-#
-#
-# pw_score_fun_alt <- function(pw_win, pw_Zd, Zn, N){
-# ## mu
-# delta_pm_f <- pw_win |> select(win) |> pull()
-# Zd_f <- pw_Zd |> select(-id_i, -id_j) |> as.matrix()
-# exp_beta_Zd_f <- exp(Zd_f %*% beta)
-# mu_f <- as.vector(exp_beta_Zd_f / (1 + exp_beta_Zd_f))
-#
-# Z_i_f <- pw_win |> select(id_i) |> left_join(Zn, by = c("id_i" = "id")) |> select(-id_i) |> as.matrix()
-# Z_j_f <- pw_win |> select(id_j) |> left_join(Zn, by = c("id_j" = "id")) |> select(-id_j) |> as.matrix()
-#
-# Rbar <- sum(abs(delta_pm_f))
-#
-# Zbar_f <- rep(0, p)
-#
-# for (k in 1:N){
-#   if (abs(delta_pm_f[k]) == 1){
-#     Zbar_f  <- Zbar_f + (mu_f[k] * Z_i_f[k, ]  + (1 - mu_f[k]) * Z_j_f[k, ]) / Rbar
-#
-#   }
-# }
-#
-#
-#
-# delta_n_w <- pw_win |> group_by(id_i) |> summarize(delta_n = sum(win == 1) / (n - 1))
-# delta_n_l <- pw_win |> group_by(id_j) |> summarize(delta_n = sum(win == -1) / (n - 1))
-#
-# delta_n <- delta_n_w |> full_join(delta_n_l, by = c("id_i" = "id_j")) |>
-#   replace_na(list(delta_n.x = 0, delta_n.y = 0)) |> mutate(delta_n = delta_n.x + delta_n.y) |> pull(delta_n)
-#
-# score_f <- colMeans((Zn |> select(-id) |> as.matrix() - matrix(rep(Zbar_f, n), nrow = n, byrow = TRUE)) * delta_n)
-#   score_f * 2
-#
-#   # score - score_f * 2
-#   # trt_ab            age            sex Black.vs.White Other.vs.White            bmi       bipllvef       hyperten
-#   # -6.422293e-14  -1.473488e-12  -4.957701e-13  -9.142687e-14  -4.748806e-17   3.168132e-12   7.837342e-13  -1.700168e-13
-#   # COPD       diabetes           acei          betab      smokecurr
-#   # -1.604619e-16   4.309053e-15  -3.320001e-13  -5.959018e-13   7.114101e-15
-#
-# }
-
-# # test Zbar (verified)
-#
-# Zbar <- score_sum |> select(id, Lambda) |>
-#   left_join(Zn, by = c("id" = "id")) |>
-#   summarize(
-#     across(3 : (2+p), \(x) weighted.mean(x, Lambda))
-#   )

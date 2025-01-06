@@ -16,7 +16,7 @@ LazyData: true
 Depends: 
   R (>= 3.5.0)
 RoxygenNote: 7.3.1
-Imports: survival, cubature, gumbel, dplyr, stringr, tidyr
+Imports: survival, cubature, gumbel, dplyr, stringr, tidyr, purrr
 Suggests: 
     knitr, rmarkdown
 VignetteBuilder: knitr
