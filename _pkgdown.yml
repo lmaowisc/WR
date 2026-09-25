@@ -1,6 +1,14 @@
 url: https://lmaowisc.github.io/WR/
 template:
   bootstrap: 5
+  bslib:
+    bg: "#FFFFFF"
+    fg: "#121212"
+    primary: "#C5050C"
+    border-color: "#E1E5E7"
+    code-color: "#17365D"
+    base_font: "Arial, Helvetica, sans-serif"
+    heading_font: "Georgia, Times New Roman, serif"
+    code_font: "Consolas, Liberation Mono, monospace"
   params:
     logo: logo.png
-

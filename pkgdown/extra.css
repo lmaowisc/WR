@@ -1,0 +1,15 @@
+/* Match the research notebook homepage, preserving pkgdown navigation. */
+:root { --wr-red: #c5050c; --wr-red-dark: #9b0000; --wr-blue: #17365d; --wr-line: #e1e5e7; }
+body { color: #121212; background: #fff; }
+.navbar { border-top: 5px solid var(--wr-red); border-bottom: 1px solid var(--wr-line); background-color: #fff !important; }
+.navbar-brand { color: var(--wr-red) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.75rem; font-weight: 700; }
+.navbar .nav-link { color: var(--wr-blue) !important; }
+.navbar .nav-link:hover, .navbar .nav-link.active { color: var(--wr-red) !important; }
+h1, h2 { color: var(--wr-blue); font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+h3, h4, h5, h6 { color: var(--wr-blue); font-family: Arial, Helvetica, sans-serif; }
+.page-header { border-bottom: 1px solid var(--wr-line); }
+a { text-underline-offset: .2em; }
+a:hover { color: var(--wr-red-dark); }
+pre, .sourceCode { border-radius: 0; }
+pre { border-color: var(--wr-line); }
+footer { border-top-color: var(--wr-line); }
